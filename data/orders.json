@@ -1,0 +1,347 @@
+[
+  {
+    "orderId": "GTH-1010",
+    "customer": {
+      "name": "Ram",
+      "phone": "9984999942",
+      "shopName": "",
+      "city": "Gorakhpur",
+      "address": "Golghar",
+      "gstNumber": ""
+    },
+    "items": [
+      {
+        "id": "TYRE-102",
+        "name": "CEAT Gripp X3 (2.75-18) - Tyre",
+        "size": "2.75-18",
+        "brand": "CEAT",
+        "quantity": 1,
+        "wholesalePrice": 1220,
+        "total": 1220
+      }
+    ],
+    "grandTotal": 1220,
+    "paymentMethod": "UPI (QR Code)",
+    "paymentStatus": "❌ Payment Not Done (UPI Selected - Awaiting Verification)",
+    "paymentDone": false,
+    "transactionId": "",
+    "orderStatus": "Delivered",
+    "shopAcknowledgment": "Order Received by Shop",
+    "gstNumber": "",
+    "notes": "",
+    "timestamp": "2026-11-22T13:48:06.713Z",
+    "status": "Delivered"
+  },
+  {
+    "orderId": "GTH-1009",
+    "customer": {
+      "name": "bhawesh",
+      "phone": "9838451157",
+      "shopName": "bhawesh auto",
+      "city": "gorakhpur",
+      "address": "transport nagar",
+      "gstNumber": ""
+    },
+    "items": [
+      {
+        "id": "TYRE-101",
+        "name": "MRF Zapper (90/90-12) - Tyre",
+        "size": "90/90-12",
+        "brand": "MRF",
+        "quantity": 1,
+        "wholesalePrice": 1150,
+        "total": 1150
+      }
+    ],
+    "grandTotal": 1150,
+    "paymentMethod": "UPI (QR Code)",
+    "paymentStatus": "✅ PAYMENT DONE (UPI Ref: 56467777777777)",
+    "paymentDone": true,
+    "transactionId": "56467777777777",
+    "orderStatus": "Delivered",
+    "shopAcknowledgment": "Order Received by Shop",
+    "gstNumber": "",
+    "notes": "",
+    "timestamp": "2026-11-22T10:24:07.674Z",
+    "status": "Delivered"
+  },
+  {
+    "orderId": "GTH-1008",
+    "customer": {
+      "name": "bhawesh",
+      "phone": "9838451157",
+      "shopName": "bhawesh auto",
+      "city": "gorakhpur",
+      "address": "transport nagar",
+      "gstNumber": ""
+    },
+    "items": [
+      {
+        "id": "TYRE-102",
+        "name": "CEAT Gripp X3 (2.75-18) - Tyre",
+        "size": "2.75-18",
+        "brand": "CEAT",
+        "quantity": 1,
+        "wholesalePrice": 1220,
+        "total": 1220
+      }
+    ],
+    "grandTotal": 1220,
+    "paymentMethod": "UPI (QR Code)",
+    "paymentStatus": "✅ PAYMENT DONE (UPI Ref: 569875631589)",
+    "paymentDone": true,
+    "transactionId": "569875631589",
+    "orderStatus": "Delivered",
+    "shopAcknowledgment": "Order Received by Shop",
+    "gstNumber": "",
+    "notes": "",
+    "timestamp": "2026-11-22T09:53:26.395Z",
+    "status": "Delivered"
+  },
+  {
+    "orderId": "GTH-1007",
+    "customer": {
+      "address": "Dharamshala Bazar, Gorakhpur",
+      "name": "Surendra Yadav",
+      "shopName": "Yadav Auto Works",
+      "phone": "9838112233",
+      "city": "Gorakhpur"
+    },
+    "items": [
+      {
+        "id": "TUBE-201",
+        "name": "MRF Butyl Motorcycle Tube (2.75/3.00-18) - Tube",
+        "size": "2.75-18",
+        "brand": "MRF",
+        "quantity": 10,
+        "wholesalePrice": 240,
+        "total": 2400
+      }
+    ],
+    "grandTotal": 2400,
+    "paymentMethod": "Cash on Delivery",
+    "paymentStatus": "❌ PAYMENT NOT DONE (Pay on Delivery / Cash)",
+    "paymentDone": false,
+    "transactionId": "",
+    "orderStatus": "Order Placed",
+    "shopAcknowledgment": "Order Received by Shop",
+    "gstNumber": "",
+    "notes": "",
+    "timestamp": "2026-11-22T09:50:32.728Z"
+  },
+  {
+    "orderId": "GTH-1006",
+    "customer": {
+      "address": "Golghar Market, Gorakhpur",
+      "name": "Ramesh Kumar",
+      "shopName": "Patel Auto Spares",
+      "phone": "9811223344",
+      "city": "Gorakhpur"
+    },
+    "items": [
+      {
+        "id": "TYRE-101",
+        "name": "MRF Zapper (90/90-12) - Tyre",
+        "size": "90/90-12",
+        "brand": "MRF",
+        "quantity": 2,
+        "wholesalePrice": 1150,
+        "total": 2300
+      }
+    ],
+    "grandTotal": 2300,
+    "paymentMethod": "UPI (QR Code)",
+    "paymentStatus": "✅ PAYMENT DONE (UPI Ref: UPI987654321012)",
+    "paymentDone": true,
+    "transactionId": "UPI987654321012",
+    "orderStatus": "Order Placed",
+    "shopAcknowledgment": "Order Received by Shop",
+    "gstNumber": "",
+    "notes": "",
+    "timestamp": "2026-11-22T09:50:13.993Z"
+  },
+  {
+    "orderId": "GTH-1005",
+    "customer": {
+      "name": "bhawesh",
+      "phone": "9838451157",
+      "shopName": "bhawesh auto",
+      "city": "gorakhpur",
+      "address": "transport nagar",
+      "gstNumber": ""
+    },
+    "items": [
+      {
+        "id": "TYRE-101",
+        "name": "MRF Zapper (90/90-12) - Tyre",
+        "size": "90/90-12",
+        "brand": "MRF",
+        "quantity": 1,
+        "wholesalePrice": 1150,
+        "total": 1150
+      }
+    ],
+    "grandTotal": 1150,
+    "paymentMethod": "UPI (QR Code)",
+    "paymentStatus": "Verification Pending / Paid",
+    "transactionId": "",
+    "orderStatus": "Order Placed",
+    "shopAcknowledgment": "Order Received by Shop",
+    "gstNumber": "",
+    "notes": "",
+    "timestamp": "2026-11-22T09:42:09.621Z"
+  },
+  {
+    "orderId": "GTH-1004",
+    "customer": {
+      "name": "bhawesh",
+      "phone": "9838451157",
+      "shopName": "bhawesh auto",
+      "city": "gorakhpur",
+      "address": "transport nagar",
+      "gstNumber": ""
+    },
+    "items": [
+      {
+        "id": "TYRE-102",
+        "name": "CEAT Gripp X3 (2.75-18)",
+        "size": "2.75-18",
+        "brand": "CEAT",
+        "quantity": 1,
+        "wholesalePrice": 1220,
+        "total": 1220
+      },
+      {
+        "id": "TYRE-107",
+        "name": "MRF Shakti Life (6.00-16) 8PR",
+        "size": "6.00-16",
+        "brand": "MRF",
+        "quantity": 1,
+        "wholesalePrice": 4650,
+        "total": 4650
+      },
+      {
+        "id": "TUBE-203",
+        "name": "JK Tyre Tractor Rear Tube (12.4/13.6-28)",
+        "size": "12.4-28",
+        "brand": "JK Tyre",
+        "quantity": 1,
+        "wholesalePrice": 2200,
+        "total": 2200
+      },
+      {
+        "id": "TYRE-101",
+        "name": "MRF Zapper (90/90-12) - Tyre",
+        "size": "90/90-12",
+        "brand": "MRF",
+        "quantity": 2,
+        "wholesalePrice": 1150,
+        "total": 2300
+      }
+    ],
+    "grandTotal": 10370,
+    "paymentMethod": "UPI (QR Code)",
+    "paymentStatus": "Verification Pending / Paid",
+    "transactionId": "",
+    "orderStatus": "Order Placed",
+    "shopAcknowledgment": "Order Received by Shop",
+    "gstNumber": "",
+    "notes": "",
+    "timestamp": "2026-11-22T09:29:59.364Z"
+  },
+  {
+    "orderId": "GTH-1003",
+    "customer": {
+      "name": "bhawesh",
+      "phone": "9838451157",
+      "shopName": "bhawesh auto",
+      "city": "gorakhpur",
+      "address": "transport nagar"
+    },
+    "items": [
+      {
+        "id": "TYRE-103",
+        "name": "Apollo Amazer 4G Life (145/80 R12)",
+        "size": "145/80 R12",
+        "brand": "Apollo",
+        "quantity": 4,
+        "wholesalePrice": 2250,
+        "total": 9000
+      }
+    ],
+    "grandTotal": 9000,
+    "paymentMethod": "UPI (QR Code)",
+    "paymentStatus": "Verification Pending / Paid",
+    "transactionId": "569875631589",
+    "orderStatus": "New Order Received",
+    "notes": "",
+    "timestamp": "2026-11-22T06:43:58.159Z"
+  },
+  {
+    "orderId": "GTH-1002",
+    "customer": {
+      "name": "Gupta Transport Co.",
+      "phone": "9839012345",
+      "shopName": "Gupta Fleet Logistics",
+      "city": "Gorakhpur",
+      "address": "Transport Nagar, Gorakhpur"
+    },
+    "items": [
+      {
+        "id": "TYRE-108",
+        "name": "Apollo EnduRace RA (10.00-20) 16PR",
+        "size": "10.00-20",
+        "brand": "Apollo",
+        "quantity": 4,
+        "wholesalePrice": 19800,
+        "total": 79200
+      }
+    ],
+    "grandTotal": 79200,
+    "paymentMethod": "UPI (QR Code)",
+    "paymentStatus": "Verification Pending / Paid",
+    "transactionId": "UPI9988223344",
+    "orderStatus": "New Order Received",
+    "notes": "Urgent truck tyres delivery",
+    "timestamp": "2026-11-22T05:48:31.744Z"
+  },
+  {
+    "orderId": "GTH-1001",
+    "customer": {
+      "name": "Ramesh Kumar (Patel Auto Parts)",
+      "phone": "9811223344",
+      "shopName": "Patel Auto Spares",
+      "city": "Gorakhpur",
+      "address": "Golghar, Gorakhpur"
+    },
+    "items": [
+      {
+        "id": "TYRE-101",
+        "name": "MRF Zapper (90/90-12)",
+        "size": "90/90-12",
+        "brand": "MRF",
+        "quantity": 10,
+        "wholesalePrice": 1150,
+        "total": 11500
+      },
+      {
+        "id": "TUBE-201",
+        "name": "MRF Butyl Tube (2.75-18)",
+        "size": "2.75-18",
+        "brand": "MRF",
+        "quantity": 20,
+        "wholesalePrice": 240,
+        "total": 4800
+      }
+    ],
+    "subtotal": 16300,
+    "discount": 300,
+    "grandTotal": 16000,
+    "paymentMethod": "UPI (QR Code)",
+    "paymentStatus": "Paid / Verified",
+    "transactionId": "UPI9823719238",
+    "orderStatus": "Processing",
+    "timestamp": "2026-11-22T09:30:00.000Z",
+    "notes": "Fast transport delivery to Golghar shop."
+  }
+]

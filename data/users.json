@@ -1,0 +1,34 @@
+[
+  {
+    "id": "CUST-001",
+    "name": "Ramesh Kumar (Patel Auto Parts)",
+    "phone": "9811223344",
+    "password": "customer123",
+    "shopName": "Patel Auto Spares & Garage",
+    "city": "Ahmedabad",
+    "address": "Shop 12, Station Road",
+    "role": "customer"
+  },
+  {
+    "id": "CUST-691809",
+    "name": "bhawesh",
+    "phone": "9838451157",
+    "password": "8076",
+    "shopName": "bhawesh auto",
+    "city": "gorakhpur",
+    "address": "transport nagar",
+    "role": "customer",
+    "createdAt": "2026-11-22T05:51:31.810Z"
+  },
+  {
+    "id": "CUST-272291",
+    "name": "Ram",
+    "phone": "9984999942",
+    "password": "5555",
+    "shopName": "",
+    "city": "Gorakhpur",
+    "address": "Golghar",
+    "role": "customer",
+    "createdAt": "2026-11-22T13:47:52.291Z"
+  }
+]

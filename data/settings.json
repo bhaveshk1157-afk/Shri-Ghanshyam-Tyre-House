@@ -1,0 +1,30 @@
+{
+  "shopName": "Shri Ghanshyam Tyre House",
+  "shortName": "Ghanshyam Tyre House",
+  "tagline": "Authorized Dealers in Tyres, Tubes & Flaps",
+  "estYear": 2008,
+  "ownerWhatsApp": "919838451157",
+  "shopUPI": "bhaveshk1157@okicici",
+  "paymentQrImage": "/images/payment-qr.jpg",
+  "address": "Shop No. 1, Near Tiwari Ji Ka Hata, Dharamshala Bazar Road, Dharamshala, Gorakhpur, Uttar Pradesh - 273001",
+  "landmark": "Near Tiwari Ji Ka Hata, Dharamshala Bazar (Near Railway Station)",
+  "city": "Gorakhpur, Uttar Pradesh",
+  "contactPhone": "+91 98384 51157",
+  "googleMapsUrl": "https://maps.google.com/?q=Shri+Ghanshyam+Tyre+House+Dharamshala+Bazar+Gorakhpur+Uttar+Pradesh",
+  "adminWhitelist": [
+    {
+      "id": "ADM-01",
+      "name": "Bhawesh (Shop Owner)",
+      "phone": "9838451157",
+      "password": "8076",
+      "role": "admin"
+    },
+    {
+      "id": "ADM-9862",
+      "name": "Owner",
+      "phone": "9984999941",
+      "password": "9984",
+      "role": "admin"
+    }
+  ]
+}

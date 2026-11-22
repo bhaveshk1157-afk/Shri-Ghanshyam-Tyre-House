@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shri Ghanshyam Tyre House - Tyres & Tubes Store | Gorakhpur</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- ================= MAIN HEADER ================= -->
+  <header class="main-header">
+    <div class="container header-content">
+      
+      <!-- Top Row: Store Brand on Left, Bag & Profile on Right -->
+      <div class="header-top-row">
+        <div class="brand-block" onclick="navigateTo('customer-home')">
+          <div class="brand-text">
+            <h1 class="shop-title" id="displayShopName">Shri Ghanshyam Tyre House</h1>
+            <p class="shop-subtitle" id="displayShopTagline">Wholesale Tyres & Tubes • Gorakhpur</p>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <!-- Bag / Cart Button (Opens Full Screen Bag) -->
+          <button class="cart-trigger" id="cartTriggerBtn" onclick="showCustomerSection('bag')" title="View Shopping Bag">
+            <i data-lucide="shopping-bag"></i>
+            <span class="cart-count" id="cartCount">0</span>
+          </button>
+
+          <!-- SINGLE Top Right Circular Profile Button -->
+          <button class="circle-profile-btn" id="headerProfileBtn" onclick="handleProfileCircleClick()" title="Customer Account / Profile">
+            <span class="circle-avatar-box" id="headerProfileAvatar">
+              <i data-lucide="user" id="profileIconGuest"></i>
+              <span class="circle-avatar-char d-none" id="circleAvatarChar">C</span>
+              <span class="online-pulse-dot d-none" id="onlinePulseDot" title="Account Active"></span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Navigation Tabs -->
+      <nav class="header-nav" id="headerNavCustomer">
+        <button class="nav-btn active" onclick="showCustomerSection('catalog')">
+          <i data-lucide="layers"></i> All Tyres & Tubes
+        </button>
+        <button class="nav-btn" onclick="showCustomerSection('my-orders')">
+          <i data-lucide="clipboard-list"></i> My Orders
+        </button>
+        <button class="nav-btn" onclick="showCustomerSection('about')">
+          <i data-lucide="map-pin"></i> Shop Location
+        </button>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- ================= CUSTOMER STORE VIEW ================= -->
+  <main id="customerView" class="view-panel">
+
+    <!-- Compact Hero / Quick WhatsApp Order Helpline (Hidden on mobile for clean breathable layout) -->
+    <section class="help-banner" id="heroHelpBanner">
+      <div class="container banner-inner">
+        <div class="banner-text">
+          <h2>Direct Tyres & Tubes Store at Genuine Prices</h2>
+          <p>Order genuine factory tyres and butyl tubes with 3 years warranty on tyres. Fast local dispatch in Gorakhpur.</p>
+        </div>
+        <div class="banner-cta">
+          <button type="button" onclick="handleWhatsAppChatterClick(event)" class="btn btn-whatsapp-large">
+            <i data-lucide="message-circle"></i> WhatsApp Quick Order
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: PRODUCT CATALOG -->
+    <section id="sectionCatalog" class="page-section active">
+      <div class="container">
+        
+        <!-- Simple Search Bar -->
+        <div class="catalog-controls">
+
+          <div class="amazon-search-bar-container">
+            <div class="amazon-search-bar compact-search-bar">
+              <div class="search-input-box">
+                <i data-lucide="search" class="search-inline-icon"></i>
+                <input type="text" id="searchInput" name="gth_store_search_query" placeholder="Search tyre size, vehicle, or brand (e.g. 90/90-12, MRF)..." autocomplete="off" spellcheck="false" oninput="handleSearch()" onfocus="showSearchHistory()" onkeydown="handleSearchKeyDown(event)">
+                <button class="search-clear-btn" id="searchClearBtn" onclick="clearSearch()" title="Clear">✕</button>
+              </div>
+              <button class="amazon-search-submit-btn" onclick="executeSearchSubmit()" title="Search">
+                <i data-lucide="search"></i>
+              </button>
+            </div>
+            
+            <!-- Custom Website-only Search History Dropdown -->
+            <div id="searchHistoryDropdown" class="search-history-dropdown d-none">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Product Cards Amazon-style List -->
+        <div class="products-list" id="productsGrid">
+          <!-- Dynamically Rendered -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION: FULL SCREEN SHOPPING BAG -->
+    <section id="sectionBag" class="page-section d-none">
+      <div class="container bag-page-container">
+        
+        <div class="bag-page-header">
+          <div>
+            <div class="bag-title-row">
+              <i data-lucide="shopping-bag" class="bag-icon-large"></i>
+              <h2>My Shopping Bag</h2>
+              <span class="bag-items-badge" id="bagPageCountBadge">0 items</span>
+            </div>
+            <p class="bag-subtitle">Review items, adjust quantities, and proceed to order with 3 years warranty on tyres</p>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="showCustomerSection('catalog')">
+            <i data-lucide="arrow-left"></i> Continue Shopping
+          </button>
+        </div>
+
+        <!-- Empty State -->
+        <div id="bagPageEmptyState" class="bag-empty-state d-none">
+          <div class="empty-bag-card">
+            <div class="empty-bag-icon-circle">
+              <i data-lucide="shopping-bag"></i>
+            </div>
+            <h3>Your Shopping Bag is Empty</h3>
+            <p>You haven't added any tyres or butyl tubes to your bag yet.</p>
+            <button class="btn btn-primary btn-lg mt-3" onclick="showCustomerSection('catalog')">
+              <i data-lucide="layers"></i> Browse All Tyres & Tubes
+            </button>
+          </div>
+        </div>
+
+        <!-- Non-Empty Bag Content -->
+        <div id="bagPageContent" class="bag-layout-grid">
+          <!-- Left Col: Items List -->
+          <div class="bag-items-col">
+            <div class="bag-items-header-bar">
+              <span>Added Items</span>
+              <button type="button" class="btn-clear-bag-text" onclick="clearCart()">Empty Bag</button>
+            </div>
+            <div class="bag-items-card" id="bagPageItemsList">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Right Col: Summary & Checkout Card -->
+          <div class="bag-summary-col">
+            <div class="bag-summary-card">
+              <h3>Order Summary</h3>
+              
+              <div class="summary-line">
+                <span>Total Items:</span>
+                <strong id="bagPageTotalUnits">0 units</strong>
+              </div>
+              <div class="summary-line">
+                <span>Items Subtotal:</span>
+                <span id="bagPageSubtotal">₹0</span>
+              </div>
+              <div class="summary-line">
+                <span>Taxes:</span>
+                <span class="text-tax-free">Inclusive of all taxes</span>
+              </div>
+
+              <div class="summary-divider"></div>
+
+              <div class="summary-total-line">
+                <span>Grand Total:</span>
+                <strong class="grand-total-amount" id="bagPageGrandTotal">₹0</strong>
+              </div>
+
+              <div class="bag-trust-badges">
+                <div class="trust-badge-item">
+                  <i data-lucide="shield-check"></i>
+                  <span>3 Years Warranty on Tyres</span>
+                </div>
+                <div class="trust-badge-item">
+                  <i data-lucide="check-circle-2"></i>
+                  <span>Factory Wholesale Pricing</span>
+                </div>
+                <div class="trust-badge-item">
+                  <i data-lucide="truck"></i>
+                  <span>Fast Gorakhpur Dispatch</span>
+                </div>
+              </div>
+
+              <button class="btn btn-checkout btn-lg btn-block" onclick="openCheckoutModal()">
+                Proceed to Order & Payment <i data-lucide="arrow-right"></i>
+              </button>
+
+              <button class="btn btn-outline btn-block mt-3" onclick="showCustomerSection('catalog')">
+                <i data-lucide="plus-circle"></i> Add More Tyres & Tubes
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION: CUSTOMER ORDERS LIST -->
+    <section id="sectionMyOrders" class="page-section d-none">
+      <div class="container orders-container">
+        <div class="section-title-row">
+          <div>
+            <h2>My Orders</h2>
+            <p>Track your submitted orders, shop acknowledgment, and live delivery status</p>
+          </div>
+          <button class="btn btn-outline" onclick="fetchCustomerOrders()">
+            <i data-lucide="rotate-cw"></i> Refresh
+          </button>
+        </div>
+
+        <!-- 2 OPTIONS: Pending Orders & Delivered Orders -->
+        <div class="order-filter-pill-bar">
+          <button type="button" class="order-filter-pill active" id="btnCustFilterPending" onclick="filterCustOrdersTab('pending')">
+            <i data-lucide="clock"></i> Pending Orders (<span id="custPendingCount">0</span>)
+          </button>
+          <button type="button" class="order-filter-pill" id="btnCustFilterDelivered" onclick="filterCustOrdersTab('delivered')">
+            <i data-lucide="check-circle-2"></i> Delivered Orders (<span id="custDeliveredCount">0</span>)
+          </button>
+        </div>
+
+        <div id="customerOrdersList" class="orders-list">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: CUSTOMER PROFILE -->
+    <section id="sectionProfile" class="page-section d-none">
+      <div class="container profile-container">
+        <div class="profile-card">
+          <div class="profile-header-card">
+            <div class="profile-avatar-large" id="profileBigAvatar">C</div>
+            <div class="profile-header-info">
+              <h2 id="profileFullName">Customer Account</h2>
+              <span class="profile-badge-pill" id="profileAccountType">Verified Customer</span>
+              <p class="profile-subtext" id="profileJoinedText">Account with Shri Ghanshyam Tyre House • Gorakhpur</p>
+            </div>
+            <button class="btn btn-outline btn-sm logout-profile-btn" onclick="logout()">
+              <i data-lucide="log-out"></i> Log Out
+            </button>
+          </div>
+
+          <div id="profileLoggedOutNotice" class="profile-logged-out-box d-none">
+            <i data-lucide="lock" class="logged-out-icon"></i>
+            <h3>Please Log In to View Your Profile</h3>
+            <p>Access your saved address, business details, past orders, and custom tire pricing.</p>
+            <div class="profile-login-actions">
+              <button class="btn btn-primary" onclick="openLoginModal('customer')">
+                <i data-lucide="log-in"></i> Customer Login
+              </button>
+              <button class="btn btn-outline" onclick="openSignupModal()">
+                <i data-lucide="user-plus"></i> Sign Up
+              </button>
+            </div>
+          </div>
+
+          <div id="profileLoggedInContent" class="profile-body-grid">
+            <!-- Account Details Card -->
+            <div class="profile-info-box">
+              <div class="box-head">
+                <div class="box-head-title">
+                  <i data-lucide="user-check"></i>
+                  <h3>Personal & Business Information</h3>
+                </div>
+                <button type="button" class="btn btn-outline btn-sm edit-profile-btn" onclick="openEditProfileModal()">
+                  <i data-lucide="edit-3"></i> Edit Details
+                </button>
+              </div>
+              <div class="profile-fields-list">
+                <div class="profile-field-row">
+                  <span class="field-label">Full Name:</span>
+                  <strong class="field-val" id="profileFieldFullName">—</strong>
+                </div>
+                <div class="profile-field-row">
+                  <span class="field-label">WhatsApp Mobile:</span>
+                  <strong class="field-val" id="profileFieldPhone">—</strong>
+                </div>
+                <div class="profile-field-row">
+                  <span class="field-label">Shop / Business:</span>
+                  <strong class="field-val" id="profileFieldShop">—</strong>
+                </div>
+                <div class="profile-field-row">
+                  <span class="field-label">City / Town:</span>
+                  <strong class="field-val" id="profileFieldCity">—</strong>
+                </div>
+                <div class="profile-field-row">
+                  <span class="field-label">Delivery Address:</span>
+                  <strong class="field-val" id="profileFieldAddress">—</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Account Actions & Benefits -->
+            <div class="profile-actions-box">
+              <div class="box-head">
+                <i data-lucide="award"></i>
+                <h3>Customer Privileges</h3>
+              </div>
+              <ul class="profile-perks-list">
+                <li><i data-lucide="check-circle-2"></i> <strong>Wholesale Bulk Rates:</strong> Direct factory wholesale pricing on tyres and tubes.</li>
+                <li><i data-lucide="check-circle-2"></i> <strong>Permanent Bag Sync:</strong> Your items stay saved in your bag even after logging back in.</li>
+                <li><i data-lucide="check-circle-2"></i> <strong>3 Years Tyre Warranty:</strong> Guaranteed coverage on all MRF, CEAT, Apollo tyres.</li>
+                <li><i data-lucide="check-circle-2"></i> <strong>Instant WhatsApp Dispatch:</strong> Direct order sync with Ghanshyam Tyre House.</li>
+              </ul>
+
+              <div class="profile-quick-btns">
+                <button type="button" class="btn btn-primary" onclick="showCustomerSection('my-orders')">
+                  <i data-lucide="clipboard-list"></i> View My Orders
+                </button>
+                <button type="button" class="btn btn-outline" onclick="openCartDrawer()">
+                  <i data-lucide="shopping-bag"></i> View Shopping Bag
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: ABOUT & LOCATION -->
+    <section id="sectionAbout" class="page-section d-none">
+      <div class="container about-container">
+        <div class="about-card">
+          <div class="about-header">
+            <div>
+              <h2>Shri Ghanshyam Tyre House</h2>
+              <span class="est-badge">Authorized Tyres & Tubes Wholesaler • Gorakhpur (Est. 2008)</span>
+            </div>
+            <div class="header-rating-badge">
+              <span>📍 Dharamshala Bazar, Gorakhpur</span>
+            </div>
+          </div>
+          <div class="about-grid">
+            <div class="about-info-col">
+              <h3><i data-lucide="map-pin"></i> Official Store & Warehouse Address</h3>
+              <p class="address-text" id="displayShopAddress">
+                Shop No. 1, Near Tiwari Ji Ka Hata, Dharamshala Bazar Road, Dharamshala, Gorakhpur, Uttar Pradesh - 273001
+              </p>
+              <p class="landmark-text"><strong>Landmark:</strong> Near Tiwari Ji Ka Hata / Dharamshala Bazar (Direct transport access near Gorakhpur Railway Station & Bashratpur Road)</p>
+              
+              <h3><i data-lucide="phone"></i> Contact & Direct Orders</h3>
+              <p class="phone-text"><strong>Phone / WhatsApp:</strong> +91 98384 51157</p>
+              <p><strong>Business Hours:</strong> Monday - Saturday: 9:00 AM - 8:30 PM (Sunday Closed)</p>
+
+              <h3><i data-lucide="shield-check"></i> Genuine Vehicle Products & Warranty</h3>
+              <ul class="check-list">
+                <li><strong>Bike Tyres & Tubes:</strong> MRF, CEAT, Apollo, JK Tyre (Splendor, Pulsar, Shine, Platina)</li>
+                <li><strong>Scooter Tyres & Tubes:</strong> Activa, Jupiter, Access, Pleasure, Dio</li>
+                <li><strong>Car Tyres & Tubes:</strong> Alto, Swift, Dzire, WagonR, Santro, Eeco</li>
+                <li><strong>Auto Rickshaw Tyres & Tubes:</strong> 4.00-8 Bajaj, Ape, Atul, TVS King</li>
+                <li><strong>Warranty:</strong> 3 Years Manufacturer Warranty on Tyres (Tube items sold without warranty)</li>
+              </ul>
+
+              <div class="about-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Shri+Ghanshyam+Tyre+House+Dharamshala+Bazar+Gorakhpur+Uttar+Pradesh" target="_blank" class="btn btn-primary">
+                  <i data-lucide="navigation"></i> Open in Google Maps
+                </a>
+                <a href="tel:+919838451157" class="btn btn-outline">
+                  <i data-lucide="phone-call"></i> Call: +91 98384 51157
+                </a>
+                <button type="button" onclick="handleWhatsAppChatterClick(event)" class="btn btn-whatsapp">
+                  <i data-lucide="message-circle"></i> Chat on WhatsApp
+                </button>
+              </div>
+            </div>
+
+            <div class="about-map-col">
+              <div class="map-embed-card">
+                <div class="map-header-bar">
+                  <span><i data-lucide="map"></i> Google Maps Location</span>
+                  <span class="live-pin-badge">Gorakhpur, UP</span>
+                </div>
+                <div class="map-iframe-container">
+                  <iframe 
+                    title="Shri Ghanshyam Tyre House Gorakhpur Google Map"
+                    src="https://maps.google.com/maps?q=Dharamshala+Bazar+Gorakhpur+Uttar+Pradesh&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+                    width="100%" 
+                    height="270" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                  </iframe>
+                </div>
+                <div class="map-footer-bar">
+                  <p>📍 Shop No. 1, Near Tiwari Ji Ka Hata, Dharamshala Bazar Road, Gorakhpur</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Storefront & Inventory Photo Gallery -->
+          <div class="shop-gallery-section">
+            <div class="gallery-title-row">
+              <div>
+                <h3><i data-lucide="camera"></i> Storefront & Inventory Gallery</h3>
+                <p>Authentic photos of Shri Ghanshyam Tyre House shop, tyre stacks, and warehouse in Gorakhpur</p>
+              </div>
+              <span class="gallery-verified-badge">✓ Google Verified Location</span>
+            </div>
+            <div class="shop-gallery-grid">
+              <div class="gallery-item">
+                <div class="gallery-img-wrapper">
+                  <img src="https://images.unsplash.com/photo-1578844251758-2f71da64c96f?w=600&auto=format&fit=crop&q=80" alt="Storefront and Tyre Racks" loading="lazy">
+                </div>
+                <div class="gallery-caption">
+                  <strong>Storefront & Main Tyre Display</strong>
+                  <span>Dharamshala Bazar Road, Gorakhpur</span>
+                </div>
+              </div>
+              <div class="gallery-item">
+                <div class="gallery-img-wrapper">
+                  <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&auto=format&fit=crop&q=80" alt="Wholesale Tyre Stacks" loading="lazy">
+                </div>
+                <div class="gallery-caption">
+                  <strong>Wholesale Brand Stacks (MRF, CEAT, Apollo)</strong>
+                  <span>Ready Stock for Bikes, Cars & Auto Rickshaws</span>
+                </div>
+              </div>
+              <div class="gallery-item">
+                <div class="gallery-img-wrapper">
+                  <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=600&auto=format&fit=crop&q=80" alt="Butyl Tubes Rack" loading="lazy">
+                </div>
+                <div class="gallery-caption">
+                  <strong>Butyl Tubes & Flaps Stock Section</strong>
+                  <span>Heavy-Duty Genuine Automotive Tubes</span>
+                </div>
+              </div>
+              <div class="gallery-item">
+                <div class="gallery-img-wrapper">
+                  <img src="https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?w=600&auto=format&fit=crop&q=80" alt="Vehicle Loading & Dispatch" loading="lazy">
+                </div>
+                <div class="gallery-caption">
+                  <strong>Dispatch & Direct Vehicle Loading Point</strong>
+                  <span>Serving Gorakhpur & Eastern UP Districts</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= ADMIN / OWNER DASHBOARD VIEW ================= -->
+  <main id="adminView" class="view-panel d-none">
+    <div class="admin-top-bar">
+      <div class="container admin-bar-inner">
+        <div class="admin-bar-left">
+          <div class="admin-shield-icon"><i data-lucide="shield-check"></i></div>
+          <div>
+            <h2>Store Management & Owner Portal</h2>
+            <p id="adminUserPill">Logged in as Administrator</p>
+          </div>
+        </div>
+        <div class="admin-bar-actions">
+          <button type="button" class="btn btn-outline-light btn-sm" onclick="switchView('customer')">
+            <i data-lucide="external-link"></i> Customer Store
+          </button>
+          <button type="button" class="btn btn-danger-soft btn-sm" onclick="logout()">
+            <i data-lucide="log-out"></i> Log Out
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container admin-main-container">
+      <!-- Admin Navigation Tabs -->
+      <div class="admin-nav-tabs">
+        <button class="admin-tab active" onclick="showAdminTab('inventory')">
+          <i data-lucide="package"></i> Products & Inventory
+        </button>
+        <button class="admin-tab" onclick="showAdminTab('orders')">
+          <i data-lucide="clipboard-list"></i> Customer Orders (<span id="adminOrdersCount">0</span>)
+        </button>
+        <button class="admin-tab" onclick="showAdminTab('settings')">
+          <i data-lucide="settings"></i> Website Customization
+        </button>
+        <button class="admin-tab" onclick="showAdminTab('admins')">
+          <i data-lucide="key"></i> Admin Credentials
+        </button>
+      </div>
+
+      <!-- TAB 1: PRODUCTS & INVENTORY -->
+      <section id="adminTabInventory" class="admin-tab-pane">
+        <div class="admin-section-head">
+          <div>
+            <h3>Product Inventory Management</h3>
+            <p>Add new tyres & tubes, update pricing or stock, change images, and remove items.</p>
+          </div>
+          <button type="button" class="btn btn-primary" onclick="openProductModal()">
+            <i data-lucide="plus-circle"></i> Add New Item
+          </button>
+        </div>
+
+        <div class="admin-inventory-search-container">
+          <div class="admin-inventory-search-box">
+            <i data-lucide="search" class="admin-search-icon"></i>
+            <input type="text" id="adminInventorySearch" placeholder="Search tyre, tube, size, brand (e.g. 90/90-12, MRF)..." oninput="handleAdminSearchInput()" onfocus="handleAdminSearchInput()" autocomplete="off">
+            <button type="button" class="admin-search-clear-btn d-none" id="adminSearchClearBtn" onclick="clearAdminSearch()" title="Clear">✕</button>
+          </div>
+
+          <!-- Matching Recommendations Dropdown -->
+          <div id="adminSearchDropdown" class="admin-search-dropdown d-none">
+            <!-- Populated dynamically with matching product recommendations -->
+          </div>
+        </div>
+
+        <div class="admin-products-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Item & Brand</th>
+                <th>Type & Size</th>
+                <th>Wholesale Price</th>
+                <th>Stock</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminProductsTbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 2: CUSTOMER ORDERS -->
+      <section id="adminTabOrders" class="admin-tab-pane d-none">
+        <div class="admin-section-head">
+          <div>
+            <h3>Customer Orders</h3>
+            <p>Review customer orders placed online or via WhatsApp.</p>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" onclick="fetchAdminOrders()">
+            <i data-lucide="refresh-cw"></i> Refresh Orders
+          </button>
+        </div>
+
+        <!-- 2 OPTIONS: Pending Orders & Delivered Orders -->
+        <div class="order-filter-pill-bar">
+          <button type="button" class="order-filter-pill active" id="btnAdminFilterPending" onclick="filterAdminOrdersTab('pending')">
+            <i data-lucide="clock"></i> Pending Orders (<span id="adminPendingCount">0</span>)
+          </button>
+          <button type="button" class="order-filter-pill" id="btnAdminFilterDelivered" onclick="filterAdminOrdersTab('delivered')">
+            <i data-lucide="check-circle-2"></i> Delivered Orders (<span id="adminDeliveredCount">0</span>)
+          </button>
+        </div>
+
+        <div id="adminOrdersList" class="admin-orders-list">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- TAB 3: WEBSITE CUSTOMIZATION -->
+      <section id="adminTabSettings" class="admin-tab-pane d-none">
+        <div class="admin-section-head">
+          <div>
+            <h3>Customize Whole Website Interface</h3>
+            <p>Update shop name, WhatsApp numbers, address, and payment QR information.</p>
+          </div>
+        </div>
+
+        <div class="admin-card-box">
+          <form id="adminSettingsForm" onsubmit="handleSaveSettings(event)">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Shop Display Name <span class="required">*</span></label>
+                <input type="text" id="setShopName" required>
+              </div>
+              <div class="form-group">
+                <label>Tagline / Subtitle</label>
+                <input type="text" id="setTagline">
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Owner WhatsApp Number (for orders) <span class="required">*</span></label>
+                <input type="tel" id="setOwnerWhatsApp" required placeholder="e.g. 919838451157">
+                <small class="form-hint">Enter with country code (e.g. 919838451157)</small>
+              </div>
+              <div class="form-group">
+                <label>Contact Phone Number</label>
+                <input type="text" id="setContactPhone">
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Shop Address <span class="required">*</span></label>
+                <textarea id="setAddress" rows="2" required></textarea>
+              </div>
+              <div class="form-group">
+                <label>Prominent Landmark</label>
+                <input type="text" id="setLandmark">
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>City & State</label>
+                <input type="text" id="setCity">
+              </div>
+              <div class="form-group">
+                <label>Shop UPI ID (for QR payment)</label>
+                <input type="text" id="setShopUPI" placeholder="e.g. ghanshyamtyres@upi">
+              </div>
+            </div>
+
+            <div id="settingsAlertMessage" class="alert-success d-none"></div>
+
+            <button type="submit" class="btn btn-primary btn-lg mt-3">
+              <i data-lucide="check-circle"></i> Save All Website Changes
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- TAB 4: ADMIN CREDENTIALS & PASSWORDS -->
+      <section id="adminTabAdmins" class="admin-tab-pane d-none">
+        <div class="admin-section-head">
+          <div>
+            <h3>Admin Credentials & Access IDs</h3>
+            <p>Create or change ID and passwords for administrators.</p>
+          </div>
+        </div>
+
+        <div class="admin-card-box">
+          <h4>Add or Update Administrator Account</h4>
+          <form id="adminCredentialsForm" onsubmit="handleSaveAdminUser(event)" class="mt-3">
+            <div class="form-row-3">
+              <div class="form-group">
+                <label>Admin Name / Title <span class="required">*</span></label>
+                <input type="text" id="newAdminName" required placeholder="e.g. Shop Owner / Manager">
+              </div>
+              <div class="form-group">
+                <label>Mobile Number / Login ID <span class="required">*</span></label>
+                <input type="text" id="newAdminPhone" required placeholder="10-digit number or ID">
+              </div>
+              <div class="form-group">
+                <label>Password <span class="required">*</span></label>
+                <input type="password" id="newAdminPassword" required placeholder="Enter admin password">
+              </div>
+            </div>
+            <div id="adminCredAlert" class="alert-success d-none"></div>
+            <button type="submit" class="btn btn-primary mt-2">
+              <i data-lucide="user-plus"></i> Save Admin Credentials
+            </button>
+          </form>
+
+          <hr class="admin-divider">
+
+          <h4>Active Administrator Accounts</h4>
+          <div class="admin-whitelist-list" id="adminWhitelistContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ================= OFFICIAL WEBSITE FOOTER ================= -->
+  <footer class="official-footer">
+    <div class="container">
+      <div class="footer-top-grid">
+        <!-- Col 1: Shop Brand & About -->
+        <div class="footer-col brand-col">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <i data-lucide="disc-3"></i>
+            </div>
+            <div>
+              <h3>Shri Ghanshyam Tyre House</h3>
+              <p class="footer-est">Authorized Wholesale & Retail Dealers • Est. 2008</p>
+            </div>
+          </div>
+          <p class="footer-desc">
+            Direct factory-authorized dealer of genuine automotive tyres and butyl tubes for bikes, scooters, cars, and auto rickshaws across Gorakhpur and Eastern Uttar Pradesh.
+          </p>
+          <div class="footer-badges">
+            <span class="f-badge">✓ 100% Genuine Brands</span>
+            <span class="f-badge">✓ 3 Years Warranty on Tyres</span>
+          </div>
+        </div>
+
+        <!-- Col 2: Store Contact & Location Details -->
+        <div class="footer-col">
+          <h4 class="footer-title"><i data-lucide="map-pin"></i> Store & Warehouse Address</h4>
+          <address class="footer-address">
+            <strong>Shop No. 1, Near Tiwari Ji Ka Hata</strong><br>
+            Dharamshala Bazar Road, Dharamshala<br>
+            Gorakhpur, Uttar Pradesh — 273001
+          </address>
+          <p class="footer-landmark">
+            <strong>Landmark:</strong> Near Tiwari Ji Ka Hata, Dharamshala Bazar (Near Railway Station)
+          </p>
+          <div class="footer-action-links">
+            <a href="https://www.google.com/maps/search/?api=1&query=Shri+Ghanshyam+Tyre+House+Dharamshala+Bazar+Gorakhpur+Uttar+Pradesh" target="_blank" class="footer-map-link">
+              <i data-lucide="navigation"></i> Open in Google Maps
+            </a>
+          </div>
+        </div>
+
+        <!-- Col 3: Contact & Business Hours -->
+        <div class="footer-col">
+          <h4 class="footer-title"><i data-lucide="phone"></i> Contact Details</h4>
+          <ul class="footer-contact-list">
+            <li>
+              <i data-lucide="phone-call"></i>
+              <div>
+                <span>Phone / Call:</span>
+                <a href="tel:+919838451157">+91 98384 51157</a>
+              </div>
+            </li>
+            <li>
+              <i data-lucide="message-circle"></i>
+              <div>
+                <span>WhatsApp Orders:</span>
+                <a href="https://wa.me/919838451157" target="_blank">+91 98384 51157</a>
+              </div>
+            </li>
+            <li>
+              <i data-lucide="mail"></i>
+              <div>
+                <span>Official Email:</span>
+                <a href="mailto:contact@ghanshyamtyres.com">contact@ghanshyamtyres.com</a>
+              </div>
+            </li>
+            <li>
+              <i data-lucide="clock"></i>
+              <div>
+                <span>Business Hours:</span>
+                <p>Mon - Sat: 9:00 AM – 8:30 PM (Sunday Closed)</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Quick Navigation -->
+        <div class="footer-col">
+          <h4 class="footer-title"><i data-lucide="link"></i> Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="javascript:void(0)" onclick="showCustomerSection('catalog')">All Tyres & Tubes</a></li>
+            <li><a href="javascript:void(0)" onclick="showCustomerSection('profile')">My Profile Account</a></li>
+            <li><a href="javascript:void(0)" onclick="showCustomerSection('about')">Store Location & Gallery</a></li>
+            <li><a href="javascript:void(0)" onclick="showCustomerSection('bag')">Shopping Bag</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Copyright Bar -->
+      <div class="footer-bottom-bar">
+        <div class="copyright-text">
+          © 2008 – 2026 <strong>Shri Ghanshyam Tyre House</strong>. All Rights Reserved. Gorakhpur, Uttar Pradesh.
+        </div>
+        <div class="footer-bottom-tags">
+          <span>MRF</span> • <span>CEAT</span> • <span>Apollo</span> • <span>JK Tyre</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= SINGLE-SCREEN SHOPPING BAG MODAL ================= -->
+  <div id="cartBackdrop" class="modal-backdrop d-none" onclick="toggleCartDrawer()">
+    <div id="cartDrawer" class="modal-card cart-modal-card" onclick="event.stopPropagation()">
+      <div class="modal-header drawer-header">
+        <div class="drawer-title">
+          <i data-lucide="shopping-bag"></i>
+          <h3>My Shopping Bag</h3>
+          <span class="bag-items-count-pill" id="cartHeaderBadge">0 items</span>
+        </div>
+        <button class="drawer-close-btn" onclick="toggleCartDrawer()" title="Close Bag">✕</button>
+      </div>
+
+      <div class="modal-body drawer-body" id="cartItemsList">
+        <!-- Items dynamically populated with photo, size, price, stepper -->
+      </div>
+
+      <div class="drawer-footer" id="cartDrawerFooter">
+        <div class="cart-summary-row">
+          <span>Total Units:</span>
+          <strong id="cartSummaryItems">0 units</strong>
+        </div>
+        <div class="cart-summary-row total-row">
+          <span>Bag Total:</span>
+          <strong class="total-price" id="cartGrandTotal">₹0</strong>
+        </div>
+        <p class="invoice-note">✓ 3 Years Warranty on Tyres • Wholesale Factory Rates</p>
+        <div class="drawer-footer-actions">
+          <button class="btn btn-checkout btn-lg" id="btnProceedCheckout" onclick="openCheckoutModal()">
+            Proceed to Order & Payment <i data-lucide="arrow-right"></i>
+          </button>
+          <button type="button" class="btn btn-outline btn-continue-shopping" onclick="toggleCartDrawer()">
+            Continue Shopping
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CHECKOUT & PAYMENT MODAL ================= -->
+  <div id="checkoutModal" class="modal-backdrop d-none">
+    <div class="modal-card checkout-modal-card">
+      <div class="modal-header">
+        <h3><i data-lucide="credit-card"></i> Complete Order & Payment</h3>
+        <button class="modal-close-btn" onclick="closeCheckoutModal()">✕</button>
+      </div>
+
+      <div class="modal-body checkout-layout">
+        <!-- Col 1: Order Items & Delivery Account Details -->
+        <div class="checkout-summary-col">
+          <div class="checkout-section-title">
+            <h4><i data-lucide="package-check"></i> Order Items (<span id="checkoutTotalUnits">0 units</span>)</h4>
+          </div>
+
+          <!-- Order Items List Container -->
+          <div id="checkoutItemsList" class="checkout-items-list">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- Calculation Breakdown -->
+          <div class="summary-breakdown">
+            <div class="breakdown-row">
+              <span>Items Total:</span>
+              <span id="checkoutSubtotal">₹0</span>
+            </div>
+            <div class="breakdown-row">
+              <span>Delivery / Loading:</span>
+              <span class="text-green font-bold">FREE Hub Pickup & Local Gorakhpur Delivery</span>
+            </div>
+            <div class="breakdown-row grand">
+              <span>Total Payable:</span>
+              <span id="checkoutGrandTotal" class="grand-total-highlight">₹0</span>
+            </div>
+          </div>
+
+          <!-- Verified Customer & Delivery Details Card (No manual typing required) -->
+          <div class="checkout-account-card">
+            <div class="account-card-header">
+              <span class="account-verified-tag"><i data-lucide="badge-check"></i> Verified Delivery Account</span>
+              <button type="button" class="btn-link-edit" onclick="openEditProfileModal()">Edit in Profile</button>
+            </div>
+            <div class="account-card-body">
+              <div class="account-buyer-name" id="chkBuyerName">Customer Account</div>
+              <div class="account-buyer-row">
+                <i data-lucide="phone"></i> <span id="chkBuyerPhone">+91 ...</span>
+              </div>
+              <div class="account-buyer-row">
+                <i data-lucide="map-pin"></i> <span id="chkBuyerAddress">Gorakhpur, Uttar Pradesh</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Col 2: Payment Options & Confirm Button -->
+        <div class="checkout-payment-col">
+          <form id="checkoutForm" onsubmit="handlePlaceOrder(event)">
+            <!-- Hidden inputs populated from currentUser account -->
+            <input type="hidden" id="custOrderName">
+            <input type="hidden" id="custOrderPhone">
+            <input type="hidden" id="custOrderShop">
+            <input type="hidden" id="custOrderCity">
+            <input type="hidden" id="custOrderAddress">
+
+            <!-- Optional Delivery Note -->
+            <div class="form-group mb-2">
+              <label style="font-size:12px; font-weight:700; color:#334155; margin-bottom:4px; display:block;">Order Note / Delivery Instructions (Optional)</label>
+              <input type="text" id="custOrderNotes" placeholder="e.g. Call before dispatch or transport name" style="font-size:13px; padding:8px 12px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:6px; width:100%; box-sizing:border-box;">
+            </div>
+
+            <!-- Conditional GST Section for Orders > ₹20,000 -->
+            <div id="gstNumberContainer" class="form-group gst-field-box d-none" style="margin-bottom:12px;">
+              <div class="gst-box-header">
+                <i data-lucide="file-check-2"></i>
+                <div>
+                  <label style="margin-bottom:2px; font-weight:800; color:#92400e;">Business GST Number (GSTIN) <span class="required">*</span></label>
+                  <small style="color:#78350f; display:block;">Mandatory requirement for commercial orders exceeding ₹20,000.</small>
+                </div>
+              </div>
+              <input type="text" id="custOrderGST" placeholder="e.g. 09ABCDE1234F1Z5" maxlength="15" style="text-transform:uppercase; font-weight:700; letter-spacing:1px; margin-top:8px;">
+              <small class="helper-text" id="gstErrorMsg" style="color:#dc2626; font-weight:700; display:none; margin-top:4px;">
+                Please enter a valid 15-character GSTIN to proceed with orders above ₹20,000.
+              </small>
+            </div>
+
+            <!-- Payment Method Selection (UPI & COD ONLY - BANK RTGS REMOVED) -->
+            <div class="checkout-section-title">
+              <h4><i data-lucide="wallet"></i> Select Payment Method</h4>
+            </div>
+
+            <div class="payment-options">
+              <!-- 1. Instant UPI (Apps & QR) -->
+              <label class="payment-card active" id="payOptionUPI" onclick="selectPaymentMethod('UPI')">
+                <input type="radio" name="paymentMethod" value="UPI (QR Code)" checked>
+                <div class="pay-icon">📱</div>
+                <div class="pay-info">
+                  <strong>Instant UPI (App / QR)</strong>
+                  <span>Pay via Google Pay, PhonePe, Paytm, or QR Code</span>
+                </div>
+              </label>
+
+              <!-- 2. Cash on Delivery -->
+              <label class="payment-card" id="payOptionCOD" onclick="selectPaymentMethod('COD')">
+                <input type="radio" name="paymentMethod" value="Cash on Delivery">
+                <div class="pay-icon">💵</div>
+                <div class="pay-info">
+                  <strong>Cash on Delivery</strong>
+                  <span>Pay cash upon local delivery / transport</span>
+                </div>
+              </label>
+            </div>
+
+            <!-- UPI Payment Detail Box with Google Pay, PhonePe, Paytm & QR options -->
+            <div id="upiPaymentBox" class="upi-box">
+              <div class="upi-header">
+                <h5><i data-lucide="smartphone"></i> Choose UPI App to Pay</h5>
+                <span class="upi-badge">Direct App Pay</span>
+              </div>
+
+              <!-- Payable Amount Strip -->
+              <div class="upi-amount-banner">
+                <span style="font-size:13px; color:#475569;">Payable Amount:</span>
+                <strong class="text-green" id="upiAmountLabel" style="font-size:17px; font-weight:800; color:#15803d;">₹0</strong>
+              </div>
+
+              <!-- 4 Options: GPay, PhonePe, Paytm, QR Code -->
+              <div class="upi-app-options">
+                <div class="upi-app-grid">
+                  <!-- 1. Google Pay -->
+                  <button type="button" class="upi-app-card gpay-card" onclick="launchUPIApp('gpay', 'checkout')">
+                    <div class="app-icon-circle">
+                      <svg viewBox="0 0 24 24" width="22" height="22">
+                        <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/>
+                        <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24Z"/>
+                        <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 10.04 0 12s.45 3.82 1.25 5.42l4.03-3.15Z"/>
+                        <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98Z"/>
+                      </svg>
+                    </div>
+                    <div class="app-card-info">
+                      <strong>Google Pay</strong>
+                      <span>Direct Pay with Amount</span>
+                    </div>
+                    <span class="app-open-tag">Open App →</span>
+                  </button>
+
+                  <!-- 2. PhonePe -->
+                  <button type="button" class="upi-app-card phonepe-card" onclick="launchUPIApp('phonepe', 'checkout')">
+                    <div class="app-icon-circle phonepe-bg">
+                      <span style="font-weight:900; color:#fff; font-size:15px;">पे</span>
+                    </div>
+                    <div class="app-card-info">
+                      <strong>PhonePe</strong>
+                      <span>Direct Pay with Amount</span>
+                    </div>
+                    <span class="app-open-tag">Open App →</span>
+                  </button>
+
+                  <!-- 3. Paytm -->
+                  <button type="button" class="upi-app-card paytm-card" onclick="launchUPIApp('paytm', 'checkout')">
+                    <div class="app-icon-circle paytm-bg">
+                      <span style="font-weight:900; color:#00b9f5; font-size:11px;">paytm</span>
+                    </div>
+                    <div class="app-card-info">
+                      <strong>Paytm UPI</strong>
+                      <span>Direct Pay with Amount</span>
+                    </div>
+                    <span class="app-open-tag">Open App →</span>
+                  </button>
+
+                  <!-- 4. Scan QR Option -->
+                  <button type="button" class="upi-app-card qr-toggle-card" onclick="togglePaymentQR('checkout')">
+                    <div class="app-icon-circle qr-bg">
+                      <i data-lucide="qr-code"></i>
+                    </div>
+                    <div class="app-card-info">
+                      <strong>Scan QR Code</strong>
+                      <span>Scan from another phone</span>
+                    </div>
+                    <span class="app-open-tag" id="checkoutQrToggleTag">Show QR ↓</span>
+                  </button>
+                </div>
+
+                <!-- Expandable QR Code Container -->
+                <div id="checkoutQRContainer" class="expandable-qr-container d-none">
+                  <div class="qr-wrapper" style="margin: 0 auto; width: 175px;">
+                    <img id="dynamicUPIQr" src="/images/payment-qr.jpg" alt="Scan UPI QR Code" class="qr-img" style="width: 155px; height: 155px;">
+                    <span class="qr-hint">Scan with GPay / PhonePe / Paytm</span>
+                  </div>
+                </div>
+
+                <!-- Copy UPI ID Strip -->
+                <div class="upi-id-copy-strip">
+                  <div class="upi-id-text">
+                    <span style="font-size:12px; color:#64748b;">Shop UPI ID:</span>
+                    <code id="upiIdLabel" style="font-weight:800; font-size:13px; color:#0284c7; background:#e0f2fe; padding:2px 6px; border-radius:4px;">bhaveshk1157@okicici</code>
+                  </div>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="copyUPI()" style="padding:4px 10px; font-size:12px; font-weight:700;">Copy ID</button>
+                </div>
+
+                <div class="form-group mt-3" style="text-align: left;">
+                  <label style="font-weight:700; font-size:12px; color:#1e293b; margin-bottom:4px; display:block;">Enter UTR / UPI Transaction ID (After Payment)</label>
+                  <input type="text" id="upiRefNumber" placeholder="e.g. 12-digit UTR or Transaction No.">
+                  <small style="font-size:11px; color:#64748b; margin-top:4px; display:block;">Enter transaction reference number after paying in your app.</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer-actions" style="margin-top:16px;">
+              <button type="submit" class="btn btn-primary btn-block btn-lg" id="submitOrderBtn">
+                <i data-lucide="check-circle"></i> Confirm & Place Order
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SUCCESS CONFIRMATION MODAL ================= -->
+  <div id="orderSuccessModal" class="modal-backdrop d-none">
+    <div class="modal-card success-card">
+      <div class="success-icon">✓</div>
+      <h2 id="successOrderTitle">Order Placed Successfully!</h2>
+      <p class="order-ref" id="successOrderId">Order #GTH-1002</p>
+      
+      <!-- Store Owner Notification Message Preview -->
+      <div class="owner-alert-notify-box">
+        <div class="notify-icon-row">
+          <i data-lucide="bell-ring" class="notify-icon"></i>
+          <div>
+            <strong style="color:#0f172a; font-size:14px; display:block;">Message Prepared for Store Owner</strong>
+            <span id="successPaymentStatusBadge" class="payment-status-pill">Payment Status</span>
+          </div>
+        </div>
+        <p style="font-size:12px; color:#475569; margin: 10px 0 12px; line-height:1.4;">
+          The website has compiled an order message with your item list, delivery address, and whether payment is done to notify <strong>+91 98384 51157</strong>.
+        </p>
+        <a id="successOwnerWhatsAppBtn" href="#" target="_blank" class="btn btn-whatsapp btn-block" style="font-size:14px; padding:10px;">
+          <i data-lucide="send"></i> Send Order Alert to Owner on WhatsApp
+        </a>
+      </div>
+
+      <div class="success-actions mt-3">
+        <button class="btn btn-outline btn-block" onclick="closeSuccessModalAndShowOrders()">
+          <i data-lucide="clipboard-list"></i> View My Orders on Website
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= WHATSAPP QUICK ORDER PAYMENT STATUS MODAL ================= -->
+  <div id="whatsappPaymentModal" class="modal-backdrop d-none">
+    <div class="modal-card auth-modal-card">
+      <div class="modal-header">
+        <h3><i data-lucide="message-circle"></i> WhatsApp Order Payment Status</h3>
+        <button class="modal-close-btn" onclick="closeWhatsAppPaymentModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:13px; color:#475569; margin-bottom:14px;">
+          Please select your payment status so it is clearly stated in your message to <strong>Shri Ghanshyam Tyre House</strong>.
+        </p>
+
+        <div class="summary-breakdown" style="margin-bottom:14px;">
+          <div class="breakdown-row">
+            <span>Items in Bag:</span>
+            <strong id="waModalItemsCount">0 items</strong>
+          </div>
+          <div class="breakdown-row grand">
+            <span>Total Amount:</span>
+            <strong class="text-green" id="waModalGrandTotal">₹0</strong>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label style="font-weight:800; font-size:13px; color:#1e293b; margin-bottom:6px;">
+            Payment Status for this Order: <span class="required">*</span>
+          </label>
+          <div class="payment-options">
+            <label class="payment-card active" id="waPayOptionNo" onclick="selectWAPaymentStatus('no')">
+              <input type="radio" name="waPaymentChoice" value="no" checked>
+              <div class="pay-icon">⏳</div>
+              <div class="pay-info">
+                <strong>Payment Not Done (Pay on Delivery)</strong>
+                <span>Payment will be made upon delivery / transport</span>
+              </div>
+            </label>
+            <label class="payment-card" id="waPayOptionYes" onclick="selectWAPaymentStatus('yes')">
+              <input type="radio" name="waPaymentChoice" value="yes">
+              <div class="pay-icon">✅</div>
+              <div class="pay-info">
+                <strong>Payment Done (UPI QR / Bank)</strong>
+                <span>Already paid via GPay, PhonePe, Paytm, or Bank</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- When Payment Done is Selected: Show Google Pay, PhonePe, Paytm, QR Option, UPI ID, and UTR -->
+        <div id="waPaymentDetailsBox" class="wa-payment-details-box d-none">
+          <div class="upi-box" style="margin-top: 12px; margin-bottom: 16px; border: 1.5px solid #bbf7d0; background: #f0fdf4; border-radius: 12px; padding: 14px;">
+            <div class="upi-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <h5 style="margin: 0; font-size: 14px; font-weight: 800; color: #166534;"><i data-lucide="smartphone"></i> Choose UPI App to Pay</h5>
+              <span class="upi-badge" style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px;">Direct App Pay</span>
+            </div>
+
+            <div class="upi-amount-banner" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+              <span style="font-size: 13px; color: #475569;">Payable Total:</span>
+              <strong class="text-green" id="waPayableAmount" style="font-size: 16px; font-weight: 800; color: #15803d;">₹0</strong>
+            </div>
+
+            <!-- Options: GPay, PhonePe, Paytm, QR -->
+            <div class="upi-app-options">
+              <div class="upi-app-grid">
+                <!-- 1. Google Pay -->
+                <button type="button" class="upi-app-card gpay-card" onclick="launchUPIApp('gpay', 'wa')">
+                  <div class="app-icon-circle">
+                    <svg viewBox="0 0 24 24" width="22" height="22">
+                      <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/>
+                      <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24Z"/>
+                      <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 10.04 0 12s.45 3.82 1.25 5.42l4.03-3.15Z"/>
+                      <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98Z"/>
+                    </svg>
+                  </div>
+                  <div class="app-card-info">
+                    <strong>Google Pay</strong>
+                    <span>Direct Pay with Amount</span>
+                  </div>
+                  <span class="app-open-tag">Open App →</span>
+                </button>
+
+                <!-- 2. PhonePe -->
+                <button type="button" class="upi-app-card phonepe-card" onclick="launchUPIApp('phonepe', 'wa')">
+                  <div class="app-icon-circle phonepe-bg">
+                    <span style="font-weight:900; color:#fff; font-size:15px;">पे</span>
+                  </div>
+                  <div class="app-card-info">
+                    <strong>PhonePe</strong>
+                    <span>Direct Pay with Amount</span>
+                  </div>
+                  <span class="app-open-tag">Open App →</span>
+                </button>
+
+                <!-- 3. Paytm -->
+                <button type="button" class="upi-app-card paytm-card" onclick="launchUPIApp('paytm', 'wa')">
+                  <div class="app-icon-circle paytm-bg">
+                    <span style="font-weight:900; color:#00b9f5; font-size:11px;">paytm</span>
+                  </div>
+                  <div class="app-card-info">
+                    <strong>Paytm UPI</strong>
+                    <span>Direct Pay with Amount</span>
+                  </div>
+                  <span class="app-open-tag">Open App →</span>
+                </button>
+
+                <!-- 4. Scan QR Option -->
+                <button type="button" class="upi-app-card qr-toggle-card" onclick="togglePaymentQR('wa')">
+                  <div class="app-icon-circle qr-bg">
+                    <i data-lucide="qr-code"></i>
+                  </div>
+                  <div class="app-card-info">
+                    <strong>Scan QR Code</strong>
+                    <span>Scan from another phone</span>
+                  </div>
+                  <span class="app-open-tag" id="waQrToggleTag">Show QR ↓</span>
+                </button>
+              </div>
+
+              <!-- Expandable QR Code Container -->
+              <div id="waQRContainer" class="expandable-qr-container d-none">
+                <div class="qr-wrapper" style="margin: 0 auto; width: 175px;">
+                  <img id="waModalUPIQr" src="/images/payment-qr.jpg" alt="Payment QR Code" class="qr-img" style="width: 155px; height: 155px;">
+                  <span class="qr-hint">Scan with GPay / PhonePe / Paytm</span>
+                </div>
+              </div>
+
+              <!-- Copy UPI ID Strip -->
+              <div class="upi-id-copy-strip">
+                <div class="upi-id-text">
+                  <span style="font-size:12px; color:#64748b;">Shop UPI ID:</span>
+                  <code id="waUpiIdLabel" style="font-weight:800; font-size:13px; color:#0284c7; background:#e0f2fe; padding:2px 6px; border-radius:4px;">bhaveshk1157@okicici</code>
+                </div>
+                <button type="button" class="btn btn-outline btn-sm" onclick="copyWAUPI()" style="padding:4px 10px; font-size:12px; font-weight:700;">Copy ID</button>
+              </div>
+
+              <div class="form-group mt-3" style="text-align: left; margin-bottom: 0;">
+                <label style="font-weight: 700; font-size: 12px; color: #1e293b; margin-bottom: 4px; display: block;">
+                  Enter UTR / UPI Transaction ID (After Payment)
+                </label>
+                <input type="text" id="waUtrInput" placeholder="e.g. 12-digit UTR or Ref number" style="font-size: 15px; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; width: 100%; box-sizing: border-box; background: #ffffff;">
+                <small style="font-size: 11px; color: #64748b; margin-top: 4px; display: block;">This reference will be automatically attached to your WhatsApp message for instant shop confirmation.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-whatsapp-large btn-block" onclick="sendWhatsAppOrderWithPaymentStatus()">
+          <i data-lucide="message-circle"></i> Send Order to WhatsApp Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= LOGIN MODAL (UNIFIED: CUSTOMER & ADMIN) ================= -->
+  <div id="loginModal" class="modal-backdrop d-none">
+    <div class="modal-card auth-modal-card">
+      <div class="modal-header">
+        <h3 id="loginModalTitle"><i data-lucide="log-in"></i> Sign In to Your Account</h3>
+        <button class="modal-close-btn" onclick="closeLoginModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+          <div class="form-group">
+            <label id="loginPhoneLabel">Mobile Number / Admin ID <span class="required">*</span></label>
+            <input type="text" id="loginPhone" required placeholder="Enter registered mobile number or admin ID">
+          </div>
+
+          <div class="form-group">
+            <label>Password <span class="required">*</span></label>
+            <input type="password" id="loginPassword" required placeholder="Enter your password">
+          </div>
+
+          <div id="loginErrorMessage" class="alert-error d-none"></div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="loginSubmitBtn">
+            Log In
+          </button>
+        </form>
+
+        <div class="auth-footer" id="customerSignupPrompt">
+          <p>Customer without an account? <a href="javascript:void(0)" onclick="openSignupModal()">Register here</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ADD / EDIT PRODUCT MODAL ================= -->
+  <div id="productModal" class="modal-backdrop d-none">
+    <div class="modal-card product-modal-card">
+      <div class="modal-header">
+        <h3 id="productModalTitle"><i data-lucide="package-plus"></i> Add New Product</h3>
+        <button class="modal-close-btn" onclick="closeProductModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="productForm" onsubmit="handleProductSubmit(event)">
+          <input type="hidden" id="editProductId">
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label>Product Name <span class="required">*</span></label>
+              <input type="text" id="prodName" required placeholder="e.g. CEAT Secura Zoom F">
+            </div>
+            <div class="form-group">
+              <label>Item Type <span class="required">*</span></label>
+              <select id="prodItemType" required>
+                <option value="Tyre" selected>🚗 Tyre</option>
+                <option value="Tube">⭕ Tube</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-3">
+            <div class="form-group">
+              <label>Brand <span class="required">*</span></label>
+              <input type="text" id="prodBrand" required placeholder="e.g. MRF, CEAT, Apollo, JK Tyre">
+            </div>
+            <div class="form-group">
+              <label>Size <span class="required">*</span></label>
+              <input type="text" id="prodSize" required placeholder="e.g. 90/90-12, 145/80 R12">
+            </div>
+            <div class="form-group">
+              <label>Vehicle Category <span class="required">*</span></label>
+              <select id="prodCategory" required>
+                <option value="Bike">🏍️ Bike</option>
+                <option value="Scooter">🛵 Scooter</option>
+                <option value="Car">🚗 Car</option>
+                <option value="Auto & Rickshaw">🛺 Auto & Rickshaw</option>
+                <option value="Tubes & Flaps">⭕ Tubes & Flaps</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-3">
+            <div class="form-group">
+              <label>Wholesale Price (₹) <span class="required">*</span></label>
+              <input type="number" id="prodWholesalePrice" required min="1" placeholder="Selling price">
+            </div>
+            <div class="form-group">
+              <label>Retail MRP (₹)</label>
+              <input type="number" id="prodRetailPrice" min="1" placeholder="Printed MRP">
+            </div>
+            <div class="form-group">
+              <label>Available Stock Units <span class="required">*</span></label>
+              <input type="number" id="prodStock" required min="0" placeholder="e.g. 50">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Product Image</label>
+            <div class="image-upload-wrapper">
+              <!-- Upload from device (camera or gallery) -->
+              <input type="file" id="prodImageFile" accept="image/*" onchange="handleImageFileUpload(event)" class="d-none">
+              <button type="button" class="btn btn-outline-primary upload-image-btn" onclick="document.getElementById('prodImageFile').click()">
+                <i data-lucide="upload-cloud"></i> Upload Image from Device (Camera / Gallery / PC)
+              </button>
+
+              <div class="image-url-sub-row">
+                <span class="image-url-label">Or paste photo URL:</span>
+                <input type="text" id="prodImage" placeholder="https://... or uploaded image path" oninput="updateImagePreview(this.value)">
+              </div>
+
+              <!-- Live Upload Status -->
+              <div id="imageUploadStatus" class="alert-info d-none"></div>
+
+              <!-- Live Image Preview -->
+              <div class="image-preview-box d-none" id="imagePreviewContainer">
+                <img id="imagePreviewImg" src="" alt="Preview">
+                <button type="button" class="btn-remove-preview" onclick="clearProductImage()" title="Remove photo">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="productErrorMessage" class="alert-error d-none"></div>
+
+          <div class="modal-footer-actions">
+            <button type="button" class="btn btn-outline" onclick="closeProductModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="productSubmitBtn">
+              <i data-lucide="check"></i> Save Product
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SIGNUP / REGISTRATION MODAL ================= -->
+  <div id="signupModal" class="modal-backdrop d-none">
+    <div class="modal-card auth-modal-card">
+      <div class="modal-header">
+        <h3><i data-lucide="user-plus"></i> Customer Registration</h3>
+        <button class="modal-close-btn" onclick="closeSignupModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="signupForm" onsubmit="handleSignupSubmit(event)">
+          <div class="form-group">
+            <label>Full Name <span class="required">*</span></label>
+            <input type="text" id="signupName" required placeholder="e.g. Ramesh Patel">
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label>WhatsApp Mobile No. <span class="required">*</span></label>
+              <input type="tel" id="signupPhone" required placeholder="10-digit number">
+            </div>
+            <div class="form-group">
+              <label>Create Password <span class="required">*</span></label>
+              <input type="password" id="signupPassword" required placeholder="Min 4 characters">
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label>Shop / Business Name (Optional)</label>
+              <input type="text" id="signupShop" placeholder="e.g. Patel Auto Spares or Individual">
+            </div>
+            <div class="form-group">
+              <label>City / Town</label>
+              <input type="text" id="signupCity" placeholder="e.g. Gorakhpur, Basti">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Full Address</label>
+            <input type="text" id="signupAddress" placeholder="Address or Location">
+          </div>
+
+          <div id="signupErrorMessage" class="alert-error d-none"></div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg">
+            Create Customer Account
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <p>Already have an account? <a href="javascript:void(0)" onclick="openLoginModal('customer')">Log in here</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= EDIT PROFILE DETAILS MODAL ================= -->
+  <div id="editProfileModal" class="modal-backdrop d-none">
+    <div class="modal-card auth-modal-card">
+      <div class="modal-header">
+        <h3><i data-lucide="user-cog"></i> Edit Profile Details</h3>
+        <button class="modal-close-btn" onclick="closeEditProfileModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="editProfileForm" onsubmit="handleEditProfileSubmit(event)">
+          <div class="form-group">
+            <label>Full Name <span class="required">*</span></label>
+            <input type="text" id="editProfileName" required placeholder="Enter full name">
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label>WhatsApp Mobile No. <span class="required">*</span></label>
+              <input type="tel" id="editProfilePhone" required placeholder="10-digit number">
+            </div>
+            <div class="form-group">
+              <label>Shop / Business Name</label>
+              <input type="text" id="editProfileShop" placeholder="e.g. Patel Auto Spares or Individual">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>City / Town</label>
+            <input type="text" id="editProfileCity" placeholder="e.g. Gorakhpur, UP">
+          </div>
+
+          <div class="form-group">
+            <label>Delivery / Billing Address</label>
+            <textarea id="editProfileAddress" rows="2" placeholder="Complete shop or home delivery address"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Change Password (Optional)</label>
+            <input type="password" id="editProfileNewPassword" placeholder="Leave blank to keep existing password">
+          </div>
+
+          <div id="editProfileErrorMessage" class="alert-error d-none"></div>
+          <div id="editProfileSuccessMessage" class="alert-success d-none"></div>
+
+          <div class="modal-footer-actions">
+            <button type="button" class="btn btn-outline" onclick="closeEditProfileModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="editProfileSubmitBtn">
+              <i data-lucide="check"></i> Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Call / WhatsApp Contact for Customers -->
+  <div class="floating-contact">
+    <button type="button" class="floating-btn whatsapp" onclick="handleWhatsAppChatterClick(event)" title="WhatsApp Order (Items in Bag)">
+      <i data-lucide="message-circle"></i>
+    </button>
+    <a href="tel:+919838451157" class="floating-btn phone" title="Call Shop Owner (Direct Call Available)">
+      <i data-lucide="phone"></i>
+    </a>
+  </div>
+
+  <!-- Item Added to Bag Toast Notification Pop-up -->
+  <div id="bagToast" class="bag-toast-popup d-none">
+    <div class="toast-content">
+      <i data-lucide="check-circle-2" class="toast-icon"></i>
+      <div class="toast-text">
+        <strong id="toastTitle">Item Added to Bag!</strong>
+        <span id="toastDesc"></span>
+      </div>
+      <button class="toast-view-btn" onclick="openCartDrawer()">View Bag</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
