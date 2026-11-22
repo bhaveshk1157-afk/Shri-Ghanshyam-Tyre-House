@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+const { connectDB, isDbReady, Product, Order, User, Settings } = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,6 +12,16 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '25mb' }));
 app.use(bodyParser.urlencoded({ limit: '25mb', extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Connect to MongoDB if MONGODB_URI is provided
+app.use(async (req, res, next) => {
+  if (process.env.MONGODB_URI && !isDbReady()) {
+    try {
+      await connectDB();
+    } catch (e) {}
+  }
+  next();
+});
 
 const DATA_DIR = path.join(__dirname, 'data');
 const UPLOADS_DIR = process.env.VERCEL ? path.join('/tmp', 'uploads') : path.join(__dirname, 'public', 'uploads');
