@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 const { connectDB, isDbReady, Product, Order, User, Settings } = require('./db');
+const { sendOrderAlerts, sendWhatsAppMessage } = require('./services/whatsapp');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -633,6 +634,11 @@ app.post('/api/orders', (req, res) => {
   waText += `-----------------------------------------\n`;
   waText += `✓ Order recorded on website store database.`;
 
+  // Trigger WhatsApp Automated Notification (Meta Cloud API)
+  sendOrderAlerts(newOrder, settings).catch(err => {
+    console.error('[WhatsApp Service Alert Error]', err);
+  });
+
   // Automated notification attempt if webhook/gateway is configured
   if (settings.notificationWebhook) {
     try {
@@ -659,6 +665,36 @@ app.post('/api/orders', (req, res) => {
     isPaymentDone: isPaymentDone,
     message: 'Order created successfully and owner notification prepared.'
   });
+});
+
+// ----------------- WHATSAPP CLOUD API WEBHOOKS -----------------
+// Verification challenge for Meta Developer App setup
+app.get('/api/webhook/whatsapp', (req, res) => {
+  const mode = req.query['hub.mode'];
+  const token = req.query['hub.verify_token'];
+  const challenge = req.query['hub.challenge'];
+  const verifyToken = process.env.WHATSAPP_VERIFY_TOKEN || 'ghanshyam_secret_verify';
+
+  if (mode === 'subscribe' && token === verifyToken) {
+    console.log('[WhatsApp Webhook] Verification challenge passed successfully');
+    return res.status(200).send(challenge);
+  }
+  return res.sendStatus(403);
+});
+
+// Incoming webhook updates from WhatsApp
+app.post('/api/webhook/whatsapp', (req, res) => {
+  console.log('[WhatsApp Webhook Event]:', JSON.stringify(req.body));
+  res.status(200).send('EVENT_RECEIVED');
+});
+
+// Test WhatsApp Endpoint
+app.post('/api/whatsapp/test', async (req, res) => {
+  const { phone, message } = req.body;
+  const target = phone || '919838451157';
+  const text = message || 'Test order alert from Shri Ghanshyam Tyre House!';
+  const result = await sendWhatsAppMessage(target, text);
+  res.json({ success: true, result });
 });
 
 // Update Order Status (Admin)
