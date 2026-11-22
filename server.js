@@ -13,9 +13,13 @@ app.use(bodyParser.urlencoded({ limit: '25mb', extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const DATA_DIR = path.join(__dirname, 'data');
-const UPLOADS_DIR = path.join(__dirname, 'public', 'uploads');
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+const UPLOADS_DIR = process.env.VERCEL ? path.join('/tmp', 'uploads') : path.join(__dirname, 'public', 'uploads');
+try {
+  if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+  }
+} catch (e) {
+  // Ignore in read-only environment
 }
 
 const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
@@ -23,15 +27,28 @@ const PRODUCTS_FILE = path.join(DATA_DIR, 'products.json');
 const ORDERS_FILE = path.join(DATA_DIR, 'orders.json');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 
+const memoryCache = {};
+
 // Helper functions for reading/writing JSON files
 function readJson(filePath, defaultValue = []) {
   try {
+    const fileName = path.basename(filePath);
+    if (process.env.VERCEL && memoryCache[fileName]) {
+      return memoryCache[fileName];
+    }
+    if (process.env.VERCEL) {
+      const tmpPath = path.join('/tmp', fileName);
+      if (fs.existsSync(tmpPath)) {
+        return JSON.parse(fs.readFileSync(tmpPath, 'utf8'));
+      }
+    }
     if (!fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, JSON.stringify(defaultValue, null, 2));
       return defaultValue;
     }
     const data = fs.readFileSync(filePath, 'utf8');
-    return JSON.parse(data);
+    const parsed = JSON.parse(data);
+    if (process.env.VERCEL) memoryCache[fileName] = parsed;
+    return parsed;
   } catch (err) {
     console.error(`Error reading ${filePath}:`, err);
     return defaultValue;
@@ -39,6 +56,15 @@ function readJson(filePath, defaultValue = []) {
 }
 
 function writeJson(filePath, data) {
+  const fileName = path.basename(filePath);
+  if (process.env.VERCEL) {
+    memoryCache[fileName] = data;
+    try {
+      const tmpPath = path.join('/tmp', fileName);
+      fs.writeFileSync(tmpPath, JSON.stringify(data, null, 2), 'utf8');
+    } catch (e) {}
+    return true;
+  }
   try {
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
     return true;
@@ -644,8 +670,10 @@ app.patch('/api/orders/:id', (req, res) => {
   res.json({ success: true, order: orders[index] });
 });
 
-app.listen(PORT, () => {
-  console.log(`Ghanshyam Tyre House server running at http://localhost:${PORT}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Ghanshyam Tyre House server running at http://localhost:${PORT}`);
+  });
+}
 
 module.exports = app;
