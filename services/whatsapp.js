@@ -24,7 +24,7 @@ async function sendWhatsAppMessage(toPhone, messageBody) {
     return { success: false, error: 'Invalid phone number' };
   }
 
-  const token = process.env.WHATSAPP_ACCESS_TOKEN || 'EAAbs0ZCj2fmgBTBQS24uDDZAgZBAYGt2eA3J07QMQM4IoaF3wTeJiWL1pB1graPvev7fo6AmnZASRF5NJyKGiAKhPDgY3MAhbvFaA9DBAhJ9Xb3QHQqut9TZAcshwQokCKCXdbJXwUzBHglQYu0KTbk2XXb6rSj9eZCLzUrtbbi3JOSgQ9J0ICzr72wU8b9iMn8VVYzPY1Q5yXv6sDDbZAVIqGlZBclPZBsaMw84YqiLBMUl72FmoULhUP2FEdbglplxu8uhhdqZCWuuaCDK1IRhhw4AZDZD';
+  const token = process.env.WHATSAPP_ACCESS_TOKEN || 'EAAbs0ZCj2fmgBTAk5ho817hLikAWqZCFEl4ZAjF69g0lj6v5A8266qGEySwD2U1ZAvnsbLluwcSayZBRPVDB8jqswTZBevxrp2bJJB9FTMDbk9hMeth4BqS5mTADXhbBtsmmzVCWOKsc2cgR63XXZCwdRPqH6VzTxwY5uBitP3uuuTYVwQC6yBb71atUY0Gs5Okp3FLvbVkbd5Tmj3PYRJQwT7y2zebiyXaxJssoNDVS8QeZCaRYv85ZBZCDW2sAxPvsOOUp2ZCZARSqR2vXN1Cd6Hws';
   const phoneId = process.env.WHATSAPP_PHONE_NUMBER_ID || '1474663832397686';
 
   if (!token || !phoneId) {
