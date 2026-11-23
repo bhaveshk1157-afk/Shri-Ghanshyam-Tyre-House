@@ -1232,8 +1232,8 @@ async function handlePlaceOrder(e) {
         statusBadge.style.color = data.isPaymentDone ? '#16a34a' : '#dc2626';
       }
       const ownerBtn = document.getElementById('successOwnerWhatsAppBtn');
-      if (ownerBtn && data.whatsappUrl) {
-        ownerBtn.href = data.whatsappUrl;
+      if (ownerBtn) {
+        ownerBtn.style.display = 'none'; // Automatic notification sent by server
       }
 
       document.getElementById('orderSuccessModal')?.classList.remove('d-none');
