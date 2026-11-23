@@ -6,6 +6,7 @@ const settingsSchema = new mongoose.Schema({
   tagline: { type: String, default: 'Authorized Dealers in Tyres, Tubes & Flaps' },
   estYear: { type: Number, default: 2008 },
   ownerWhatsApp: { type: String, default: '919838451157' },
+  enableOnlinePayment: { type: Boolean, default: false },
   shopUPI: { type: String, default: 'bhaveshk1157@okicici' },
   paymentQrImage: { type: String, default: '/images/payment-qr.jpg' },
   address: { type: String, default: '' },

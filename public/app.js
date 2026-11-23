@@ -983,6 +983,17 @@ function openCheckoutModal() {
   renderCheckoutSummary();
   updateUPIQRCode();
 
+  // Handle Online Payment toggle (Turned OFF: Cash on Delivery only)
+  const upiOpt = document.getElementById('payOptionUPI');
+  const upiBox = document.getElementById('upiPaymentBox');
+  if (shopSettings.enableOnlinePayment === false) {
+    if (upiOpt) upiOpt.style.display = 'none';
+    if (upiBox) upiBox.style.display = 'none';
+    selectPaymentMethod('COD');
+  } else {
+    if (upiOpt) upiOpt.style.display = 'flex';
+  }
+
   document.getElementById('checkoutModal')?.classList.remove('d-none');
   if (window.lucide) lucide.createIcons();
 }
@@ -1232,8 +1243,9 @@ async function handlePlaceOrder(e) {
         statusBadge.style.color = data.isPaymentDone ? '#16a34a' : '#dc2626';
       }
       const ownerBtn = document.getElementById('successOwnerWhatsAppBtn');
-      if (ownerBtn) {
-        ownerBtn.style.display = 'none'; // Automatic notification sent by server
+      if (ownerBtn && data.whatsappUrl) {
+        ownerBtn.href = data.whatsappUrl;
+        ownerBtn.style.display = 'flex';
       }
 
       document.getElementById('orderSuccessModal')?.classList.remove('d-none');
@@ -2280,6 +2292,7 @@ function loadSettingsIntoAdminForm() {
   const setLandmark = document.getElementById('setLandmark');
   const setCity = document.getElementById('setCity');
   const setUPI = document.getElementById('setShopUPI');
+  const setOnlinePay = document.getElementById('setEnableOnlinePayment');
 
   if (setShopName) setShopName.value = shopSettings.shopName || '';
   if (setTagline) setTagline.value = shopSettings.tagline || '';
@@ -2289,6 +2302,7 @@ function loadSettingsIntoAdminForm() {
   if (setLandmark) setLandmark.value = shopSettings.landmark || '';
   if (setCity) setCity.value = shopSettings.city || '';
   if (setUPI) setUPI.value = shopSettings.shopUPI || '';
+  if (setOnlinePay) setOnlinePay.checked = shopSettings.enableOnlinePayment === true;
 }
 
 async function handleSaveSettings(e) {
@@ -2304,7 +2318,8 @@ async function handleSaveSettings(e) {
     address: document.getElementById('setAddress')?.value.trim() || '',
     landmark: document.getElementById('setLandmark')?.value.trim() || '',
     city: document.getElementById('setCity')?.value.trim() || '',
-    shopUPI: document.getElementById('setShopUPI')?.value.trim() || ''
+    shopUPI: document.getElementById('setShopUPI')?.value.trim() || '',
+    enableOnlinePayment: document.getElementById('setEnableOnlinePayment')?.checked || false
   };
 
   try {
