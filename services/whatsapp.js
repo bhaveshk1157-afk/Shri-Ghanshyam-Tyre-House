@@ -24,8 +24,8 @@ async function sendWhatsAppMessage(toPhone, messageBody) {
     return { success: false, error: 'Invalid phone number' };
   }
 
-  const token = process.env.WHATSAPP_ACCESS_TOKEN;
-  const phoneId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+  const token = process.env.WHATSAPP_ACCESS_TOKEN || 'EAAbs0ZCj2fmgBTBQS24uDDZAgZBAYGt2eA3J07QMQM4IoaF3wTeJiWL1pB1graPvev7fo6AmnZASRF5NJyKGiAKhPDgY3MAhbvFaA9DBAhJ9Xb3QHQqut9TZAcshwQokCKCXdbJXwUzBHglQYu0KTbk2XXb6rSj9eZCLzUrtbbi3JOSgQ9J0ICzr72wU8b9iMn8VVYzPY1Q5yXv6sDDbZAVIqGlZBclPZBsaMw84YqiLBMUl72FmoULhUP2FEdbglplxu8uhhdqZCWuuaCDK1IRhhw4AZDZD';
+  const phoneId = process.env.WHATSAPP_PHONE_NUMBER_ID || '1474663832397686';
 
   if (!token || !phoneId) {
     console.log(`[WhatsApp Simulated Mode] To: ${formattedPhone}`);
