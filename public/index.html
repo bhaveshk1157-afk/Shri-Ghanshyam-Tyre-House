@@ -5,11 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shri Ghanshyam Tyre House - Tyres & Tubes Store | Gorakhpur</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet"></noscript>
+  <script>
+    window.__earlySettingsPromise = fetch('/api/settings').then(function(r) { return r.json(); }).catch(function() { return null; });
+    window.__earlyProductsPromise = fetch('/api/products').then(function(r) { return r.json(); }).catch(function() { return null; });
+  </script>
+  <!-- Lucide Icons (Pinned + Deferred for zero render blocking) -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@1.79.0/dist/umd/lucide.min.js" defer></script>
+  <script src="app.js" defer></script>
 </head>
 <body>
 
@@ -107,7 +115,11 @@
 
         <!-- Product Cards Amazon-style List -->
         <div class="products-list" id="productsGrid">
-          <!-- Dynamically Rendered -->
+          <!-- Lightweight initial skeleton cards shown instantly before JS finishes -->
+          <div class="product-skeleton-card" aria-hidden="true"><div class="skel-img"></div><div class="skel-line skel-short"></div><div class="skel-line"></div><div class="skel-line skel-med"></div></div>
+          <div class="product-skeleton-card" aria-hidden="true"><div class="skel-img"></div><div class="skel-line skel-short"></div><div class="skel-line"></div><div class="skel-line skel-med"></div></div>
+          <div class="product-skeleton-card" aria-hidden="true"><div class="skel-img"></div><div class="skel-line skel-short"></div><div class="skel-line"></div><div class="skel-line skel-med"></div></div>
+          <div class="product-skeleton-card" aria-hidden="true"><div class="skel-img"></div><div class="skel-line skel-short"></div><div class="skel-line"></div><div class="skel-line skel-med"></div></div>
         </div>
 
       </div>
@@ -199,7 +211,7 @@
               </div>
 
               <button class="btn btn-checkout btn-lg btn-block" onclick="openCheckoutModal()">
-                Proceed to Order & Payment <i data-lucide="arrow-right"></i>
+                <span class="checkout-btn-label">Proceed to Order</span> <i data-lucide="arrow-right"></i>
               </button>
 
               <button class="btn btn-outline btn-block mt-3" onclick="showCustomerSection('catalog')">
@@ -389,8 +401,9 @@
                 </div>
                 <div class="map-iframe-container">
                   <iframe 
+                    id="shopGoogleMapIframe"
                     title="Shri Ghanshyam Tyre House Gorakhpur Google Map"
-                    src="https://maps.google.com/maps?q=Dharamshala+Bazar+Gorakhpur+Uttar+Pradesh&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+                    data-src="https://maps.google.com/maps?q=Dharamshala+Bazar+Gorakhpur+Uttar+Pradesh&t=&z=15&ie=UTF8&iwloc=&output=embed" 
                     width="100%" 
                     height="270" 
                     style="border:0;" 
@@ -819,7 +832,7 @@
         <p class="invoice-note">✓ 3 Years Warranty on Tyres • Wholesale Factory Rates</p>
         <div class="drawer-footer-actions">
           <button class="btn btn-checkout btn-lg" id="btnProceedCheckout" onclick="openCheckoutModal()">
-            Proceed to Order & Payment <i data-lucide="arrow-right"></i>
+            <span class="checkout-btn-label">Proceed to Order</span> <i data-lucide="arrow-right"></i>
           </button>
           <button type="button" class="btn btn-outline btn-continue-shopping" onclick="toggleCartDrawer()">
             Continue Shopping
@@ -833,7 +846,7 @@
   <div id="checkoutModal" class="modal-backdrop d-none">
     <div class="modal-card checkout-modal-card">
       <div class="modal-header">
-        <h3><i data-lucide="credit-card"></i> Complete Order & Payment</h3>
+        <h3 id="checkoutModalTitle"><i data-lucide="shopping-bag"></i> <span id="checkoutModalTitleText">Complete Order</span></h3>
         <button class="modal-close-btn" onclick="closeCheckoutModal()">✕</button>
       </div>
 
@@ -921,8 +934,8 @@
 
             <div class="payment-options">
               <!-- 1. Instant UPI (Apps & QR) -->
-              <label class="payment-card active" id="payOptionUPI" onclick="selectPaymentMethod('UPI')">
-                <input type="radio" name="paymentMethod" value="UPI (QR Code)" checked>
+              <label class="payment-card" id="payOptionUPI" style="display:none;" onclick="selectPaymentMethod('UPI')">
+                <input type="radio" name="paymentMethod" value="UPI (QR Code)">
                 <div class="pay-icon">📱</div>
                 <div class="pay-info">
                   <strong>Instant UPI (App / QR)</strong>
@@ -931,8 +944,8 @@
               </label>
 
               <!-- 2. Cash on Delivery -->
-              <label class="payment-card" id="payOptionCOD" onclick="selectPaymentMethod('COD')">
-                <input type="radio" name="paymentMethod" value="Cash on Delivery">
+              <label class="payment-card active" id="payOptionCOD" onclick="selectPaymentMethod('COD')">
+                <input type="radio" name="paymentMethod" value="Cash on Delivery" checked>
                 <div class="pay-icon">💵</div>
                 <div class="pay-info">
                   <strong>Cash on Delivery</strong>
@@ -942,7 +955,7 @@
             </div>
 
             <!-- UPI Payment Detail Box with Google Pay, PhonePe, Paytm & QR options -->
-            <div id="upiPaymentBox" class="upi-box">
+            <div id="upiPaymentBox" class="upi-box" style="display:none;">
               <div class="upi-header">
                 <h5><i data-lucide="smartphone"></i> Choose UPI App to Pay</h5>
                 <span class="upi-badge">Direct App Pay</span>
@@ -1083,12 +1096,12 @@
   <div id="whatsappPaymentModal" class="modal-backdrop d-none">
     <div class="modal-card auth-modal-card">
       <div class="modal-header">
-        <h3><i data-lucide="message-circle"></i> WhatsApp Order Payment Status</h3>
+        <h3 id="waModalTitle"><i data-lucide="message-circle"></i> <span id="waModalTitleText">WhatsApp Quick Order</span></h3>
         <button class="modal-close-btn" onclick="closeWhatsAppPaymentModal()">✕</button>
       </div>
       <div class="modal-body">
-        <p style="font-size:13px; color:#475569; margin-bottom:14px;">
-          Please select your payment status so it is clearly stated in your message to <strong>Shri Ghanshyam Tyre House</strong>.
+        <p id="waModalSubtitle" style="font-size:13px; color:#475569; margin-bottom:14px;">
+          Review your bag summary below and send your Cash on Delivery order directly to <strong>Shri Ghanshyam Tyre House</strong> on WhatsApp.
         </p>
 
         <div class="summary-breakdown" style="margin-bottom:14px;">
@@ -1096,13 +1109,17 @@
             <span>Items in Bag:</span>
             <strong id="waModalItemsCount">0 items</strong>
           </div>
+          <div class="breakdown-row" id="waModalCodRow">
+            <span>Payment Method:</span>
+            <strong style="color:#15803d;">💵 Cash on Delivery</strong>
+          </div>
           <div class="breakdown-row grand">
             <span>Total Amount:</span>
             <strong class="text-green" id="waModalGrandTotal">₹0</strong>
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group d-none" id="waPaymentSelectionGroup">
           <label style="font-weight:800; font-size:13px; color:#1e293b; margin-bottom:6px;">
             Payment Status for this Order: <span class="required">*</span>
           </label>
@@ -1498,6 +1515,5 @@
     </div>
   </div>
 
-  <script src="app.js"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
    =================================================== */
 
 // Global State
-let shopSettings = {};
+let shopSettings = { enableOnlinePayment: false };
 let allProducts = [];
 let cart = [];
 let currentCategory = 'All'; // 'All' | 'Bike' | 'Scooter' | 'Car' | 'Auto & Rickshaw'
@@ -13,13 +13,37 @@ let currentBrand = 'All';
 let currentUser = null; // { role: 'customer', name, phone, ... }
 let currentWAPaymentChoice = 'no'; // 'no' | 'yes'
 
+// Hydrate cached catalog/settings synchronously for instant first render on repeat visits
+function hydrateCachedCatalog() {
+  try {
+    const cachedSettings = localStorage.getItem('gth_cached_settings');
+    if (cachedSettings) {
+      const parsedSettings = JSON.parse(cachedSettings);
+      if (parsedSettings && typeof parsedSettings === 'object') {
+        shopSettings = parsedSettings;
+        applySettingsToUI();
+      }
+    }
+    const cachedProducts = localStorage.getItem('gth_cached_products');
+    if (cachedProducts) {
+      const parsedProducts = JSON.parse(cachedProducts);
+      if (Array.isArray(parsedProducts) && parsedProducts.length > 0) {
+        allProducts = parsedProducts;
+        renderProducts();
+      }
+    }
+  } catch (e) {
+    // Ignore cache read error
+  }
+}
+
 // Initialize on DOM Ready
 document.addEventListener('DOMContentLoaded', async () => {
   loadStoredSession();
   loadStoredCart();
-  await fetchSettings();
-  await fetchProducts();
+  hydrateCachedCatalog();
   setupEventListeners();
+  await Promise.all([fetchSettings(), fetchProducts()]);
   if (window.lucide) lucide.createIcons();
 });
 
@@ -82,9 +106,14 @@ function saveCart() {
 // ----------------- SETTINGS API -----------------
 async function fetchSettings() {
   try {
-    const res = await fetch('/api/settings');
-    shopSettings = await res.json();
-    applySettingsToUI();
+    const earlyData = window.__earlySettingsPromise ? await window.__earlySettingsPromise : null;
+    window.__earlySettingsPromise = null;
+    const settings = earlyData || await (await fetch('/api/settings')).json();
+    if (settings && typeof settings === 'object') {
+      shopSettings = settings;
+      try { localStorage.setItem('gth_cached_settings', JSON.stringify(shopSettings)); } catch (e) {}
+      applySettingsToUI();
+    }
   } catch (err) {
     console.error('Failed to load settings', err);
   }
@@ -107,14 +136,38 @@ function applySettingsToUI() {
     const upiEl = document.getElementById('upiIdLabel');
     if (upiEl) upiEl.innerText = shopSettings.shopUPI;
   }
+
+  // Toggle payment UI visibility cleanly across store modals without removing code
+  const onlinePayEnabled = shopSettings.enableOnlinePayment === true;
+  document.querySelectorAll('.checkout-btn-label').forEach(el => {
+    el.innerText = onlinePayEnabled ? 'Proceed to Order & Payment' : 'Proceed to Order';
+  });
+  const chkTitleEl = document.getElementById('checkoutModalTitleText');
+  if (chkTitleEl) {
+    chkTitleEl.innerText = onlinePayEnabled ? 'Complete Order & Payment' : 'Complete Order';
+  }
+  const upiOpt = document.getElementById('payOptionUPI');
+  const upiBox = document.getElementById('upiPaymentBox');
+  if (!onlinePayEnabled) {
+    if (upiOpt) upiOpt.style.display = 'none';
+    if (upiBox) upiBox.style.display = 'none';
+    selectPaymentMethod('COD');
+  } else {
+    if (upiOpt) upiOpt.style.display = 'flex';
+  }
 }
 
 // ----------------- PRODUCTS API -----------------
 async function fetchProducts() {
   try {
-    const res = await fetch('/api/products');
-    allProducts = await res.json();
-    renderProducts();
+    const earlyData = window.__earlyProductsPromise ? await window.__earlyProductsPromise : null;
+    window.__earlyProductsPromise = null;
+    const products = earlyData || await (await fetch('/api/products')).json();
+    if (Array.isArray(products)) {
+      allProducts = products;
+      try { localStorage.setItem('gth_cached_products', JSON.stringify(allProducts)); } catch (e) {}
+      renderProducts();
+    }
   } catch (err) {
     console.error('Failed to load products', err);
   }
@@ -380,10 +433,11 @@ function renderProducts() {
   }
 
   // Render 2-in-a-Row Amazon Grid (Photo on top, Name, Description, Price, Add to Bag below)
-  container.innerHTML = filtered.map(prod => {
+  container.innerHTML = filtered.map((prod, idx) => {
     const isOutOfStock = prod.stock <= 0;
     const isTube = (prod.itemType === 'Tube' || prod.category === 'Tubes & Flaps' || (prod.id && prod.id.startsWith('TUBE-')));
     const itemKind = isTube ? 'Tube' : 'Tyre';
+    const imgLoadingAttr = idx < 4 ? 'fetchpriority="high" decoding="async"' : 'loading="lazy" decoding="async"';
     
     const savingPercent = prod.retailPrice && prod.wholesalePrice 
       ? Math.round(((prod.retailPrice - prod.wholesalePrice) / prod.retailPrice) * 100)
@@ -394,7 +448,7 @@ function renderProducts() {
         
         <!-- 1. Product Image with Brand Tag -->
         <div class="grid-card-img-wrapper">
-          <img src="${prod.image || 'https://images.unsplash.com/photo-1578844251758-2f71da64c96f?w=500&auto=format&fit=crop&q=60'}" alt="${prod.name}" loading="lazy">
+          <img src="${prod.image || 'https://images.unsplash.com/photo-1578844251758-2f71da64c96f?w=500&auto=format&fit=crop&q=60'}" alt="${prod.name}" ${imgLoadingAttr}>
           <span class="grid-brand-pill">${prod.brand}</span>
         </div>
 
@@ -849,7 +903,32 @@ function openWhatsAppPaymentModal() {
   if (upiIdLabel) upiIdLabel.innerText = shopSettings.shopUPI || 'bhaveshk1157@okicici';
   if (qrImg) qrImg.src = shopSettings.paymentQrImage || '/images/payment-qr.jpg';
 
-  selectWAPaymentStatus('no');
+  const onlinePayEnabled = shopSettings.enableOnlinePayment === true;
+  const selectionGroup = document.getElementById('waPaymentSelectionGroup');
+  const detailsBox = document.getElementById('waPaymentDetailsBox');
+  const codRow = document.getElementById('waModalCodRow');
+  const titleText = document.getElementById('waModalTitleText');
+  const subtitleEl = document.getElementById('waModalSubtitle');
+
+  if (onlinePayEnabled) {
+    selectionGroup?.classList.remove('d-none');
+    codRow?.classList.add('d-none');
+    if (titleText) titleText.innerText = 'WhatsApp Order Payment Status';
+    if (subtitleEl) {
+      subtitleEl.innerHTML = 'Please select your payment status so it is clearly stated in your message to <strong>Shri Ghanshyam Tyre House</strong>.';
+    }
+    selectWAPaymentStatus('no');
+  } else {
+    selectionGroup?.classList.add('d-none');
+    detailsBox?.classList.add('d-none');
+    codRow?.classList.remove('d-none');
+    if (titleText) titleText.innerText = 'WhatsApp Quick Order';
+    if (subtitleEl) {
+      subtitleEl.innerHTML = 'Review your bag summary below and send your Cash on Delivery order directly to <strong>Shri Ghanshyam Tyre House</strong> on WhatsApp.';
+    }
+    currentWAPaymentChoice = 'no';
+  }
+
   const utrInput = document.getElementById('waUtrInput');
   if (utrInput) utrInput.value = '';
 
@@ -918,14 +997,18 @@ function sendWhatsAppOrderWithPaymentStatus() {
   msg += `------------------------------------\n`;
   msg += `*TOTAL AMOUNT: ₹${totalAmount.toLocaleString('en-IN')}*\n`;
 
-  // Explicitly mention whether payment is done or not
-  if (currentWAPaymentChoice === 'yes') {
-    msg += `*Payment Status:* ✅ PAYMENT DONE (UPI / Bank Transfer)\n`;
-    if (utrNumber) {
-      msg += `*Transaction UTR / Ref:* ${utrNumber}\n`;
+  // Mention Cash on Delivery when online payment is disabled, or selected payment status when enabled
+  if (shopSettings.enableOnlinePayment === true) {
+    if (currentWAPaymentChoice === 'yes') {
+      msg += `*Payment Status:* ✅ PAYMENT DONE (UPI / Bank Transfer)\n`;
+      if (utrNumber) {
+        msg += `*Transaction UTR / Ref:* ${utrNumber}\n`;
+      }
+    } else {
+      msg += `*Payment Status:* ⏳ PAYMENT NOT DONE (Pay on Delivery / Transport Khata)\n`;
     }
   } else {
-    msg += `*Payment Status:* ⏳ PAYMENT NOT DONE (Pay on Delivery / Transport Khata)\n`;
+    msg += `*Payment Method:* 💵 Cash on Delivery (Pay on Delivery / Transport)\n`;
   }
 
   if (totalAmount > 20000) {
@@ -986,7 +1069,7 @@ function openCheckoutModal() {
   // Handle Online Payment toggle (Turned OFF: Cash on Delivery only)
   const upiOpt = document.getElementById('payOptionUPI');
   const upiBox = document.getElementById('upiPaymentBox');
-  if (shopSettings.enableOnlinePayment === false) {
+  if (shopSettings.enableOnlinePayment !== true) {
     if (upiOpt) upiOpt.style.display = 'none';
     if (upiBox) upiBox.style.display = 'none';
     selectPaymentMethod('COD');
@@ -1205,9 +1288,12 @@ async function handlePlaceOrder(e) {
     gstNumber: gstNumber
   };
 
+  const onlinePayEnabled = shopSettings.enableOnlinePayment === true;
   const paymentMethodInput = document.querySelector('input[name="paymentMethod"]:checked');
-  const paymentMethod = paymentMethodInput ? paymentMethodInput.value : 'UPI (QR Code)';
-  const transactionId = document.getElementById('upiRefNumber')?.value.trim() || '';
+  const paymentMethod = onlinePayEnabled
+    ? (paymentMethodInput ? paymentMethodInput.value : 'UPI (QR Code)')
+    : 'Cash on Delivery';
+  const transactionId = onlinePayEnabled ? (document.getElementById('upiRefNumber')?.value.trim() || '') : '';
   const notes = document.getElementById('custOrderNotes')?.value.trim() || '';
 
   const orderPayload = {
@@ -1439,6 +1525,11 @@ function showCustomerSection(sec) {
   } else if (sec === 'about') {
     document.getElementById('sectionAbout')?.classList.remove('d-none');
     if (navBtns[2]) navBtns[2].classList.add('active');
+    // Load Google Maps iframe lazily only when Shop Location tab is opened
+    const mapIframe = document.getElementById('shopGoogleMapIframe');
+    if (mapIframe && !mapIframe.getAttribute('src') && mapIframe.dataset.src) {
+      mapIframe.src = mapIframe.dataset.src;
+    }
   }
   if (window.lucide) lucide.createIcons();
 }
@@ -2331,6 +2422,7 @@ async function handleSaveSettings(e) {
     const data = await res.json();
     if (data.success) {
       shopSettings = { ...shopSettings, ...updatedSettings };
+      try { localStorage.setItem('gth_cached_settings', JSON.stringify(shopSettings)); } catch (e) {}
       applySettingsToUI();
       if (alertEl) {
         alertEl.innerText = 'Website interface and store information saved and updated live!';

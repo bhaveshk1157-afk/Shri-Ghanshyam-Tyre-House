@@ -14,12 +14,10 @@ app.use(bodyParser.json({ limit: '25mb' }));
 app.use(bodyParser.urlencoded({ limit: '25mb', extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Connect to MongoDB if MONGODB_URI is provided
-app.use(async (req, res, next) => {
+// Warm MongoDB connection in background without blocking fast catalog & settings reads
+app.use((req, res, next) => {
   if (process.env.MONGODB_URI && !isDbReady()) {
-    try {
-      await connectDB();
-    } catch (e) {}
+    connectDB().catch(() => {});
   }
   next();
 });
